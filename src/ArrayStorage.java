@@ -17,7 +17,7 @@ public class ArrayStorage {
             System.out.println("The array is full");
             return;
         }
-        if (findResume(resume.uuid) >= 0) {
+        if (findElementIndex(resume.uuid) >= 0) {
             System.out.println("Resume already exists!");
         } else {
             storage[size] = resume;
@@ -26,17 +26,18 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        int index;
-        if ((index = findResume(resume.uuid)) < 0) {
+        int index = findElementIndex(resume.uuid);
+        if (index < 0) {
             System.out.println("Resume does not exist!");
         } else {
             storage[index] = resume;
+            System.out.println("Update successful");
         }
     }
 
     public Resume get(String uuid) {
-        int index;
-        if ((index = findResume(uuid)) < 0) {
+        int index = findElementIndex(uuid);
+        if (index < 0) {
             System.out.println("Resume does not exist!");
             return null;
         } else {
@@ -45,8 +46,8 @@ public class ArrayStorage {
     }
 
     public void delete(String uuid) {
-        int index;
-        if ((index = findResume(uuid)) < 0) {
+        int index = findElementIndex(uuid);
+        if (index < 0) {
             System.out.println("Resume does not exist!");
         } else {
             //System.arraycopy(storage,  index + 1, storage, index, size - 1 - index); does not work
@@ -56,7 +57,7 @@ public class ArrayStorage {
         }
     }
 
-    private int findResume(String uuid) {
+    private int findElementIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (uuid.equals(storage[i].uuid)) {
                 return i;
