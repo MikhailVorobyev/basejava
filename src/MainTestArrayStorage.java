@@ -28,9 +28,9 @@ public class MainTestArrayStorage {
         updateR3.uuid = "uuid3";
         ARRAY_STORAGE.update(r3);
 
-        Resume r4 = new Resume();
-        r4.uuid = "uuid4";
-        ARRAY_STORAGE.update(r4);
+        Resume dummy = new Resume();
+        dummy.uuid = "uuid4";
+        ARRAY_STORAGE.update(dummy);
 
         ARRAY_STORAGE.clear();
         printAll();
