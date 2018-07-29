@@ -1,11 +1,15 @@
+package storage;
+
+import model.Resume;
 import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
+    private static final int STORAGE_LIMIT = 10000;
     private int size;
-    private Resume[] storage = new Resume[10000];
+    private Resume[] storage = new Resume[STORAGE_LIMIT];
 
     public void clear() {
         Arrays.fill(storage, 0, size, null);
@@ -14,8 +18,8 @@ public class ArrayStorage {
 
     public void save(Resume resume) {
         if (findElementIndex(resume.getUuid()) >= 0) {
-            System.out.println("Resume already exists!");
-        } else if (size == storage.length) {
+            System.out.println("Resume " + resume.getUuid() + " already exists!");
+        } else if (size == STORAGE_LIMIT) {
             System.out.println("The array is full");
         } else {
             storage[size] = resume;
@@ -26,7 +30,7 @@ public class ArrayStorage {
     public void update(Resume resume) {
         int index = findElementIndex(resume.getUuid());
         if (index < 0) {
-            System.out.println("Resume does not exist!");
+            System.out.println("Resume " + resume.getUuid() + " does not exist!");
         } else {
             storage[index] = resume;
             System.out.println("Update successful");
@@ -36,7 +40,7 @@ public class ArrayStorage {
     public Resume get(String uuid) {
         int index = findElementIndex(uuid);
         if (index < 0) {
-            System.out.println("Resume does not exist!");
+            System.out.println("Resume " + uuid + " does not exist!");
             return null;
         } else {
             return storage[index];
@@ -46,7 +50,7 @@ public class ArrayStorage {
     public void delete(String uuid) {
         int index = findElementIndex(uuid);
         if (index < 0) {
-            System.out.println("Resume does not exist!");
+            System.out.println("Resume " + uuid + " does not exist!");
         } else {
             storage[index] = storage[size - 1];
             storage[size - 1] = null;
