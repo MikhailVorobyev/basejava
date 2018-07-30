@@ -29,6 +29,7 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.println("The array is full");
         } else {
             saveResume(r, index);
+            size++;
         }
     }
 
@@ -39,6 +40,7 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.println("Resume " + uuid + " does not exist!");
         } else {
             deleteResume(index);
+            size--;
         }
     }
 
