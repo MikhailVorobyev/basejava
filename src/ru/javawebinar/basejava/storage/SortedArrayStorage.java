@@ -1,6 +1,6 @@
-package storage;
+package ru.javawebinar.basejava.storage;
 
-import model.Resume;
+import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
@@ -15,7 +15,6 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     protected void deleteResume(int index) {
         System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
-        storage[size - 1] = null;
     }
 
     @Override
