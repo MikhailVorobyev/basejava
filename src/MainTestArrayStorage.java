@@ -1,11 +1,13 @@
 import model.Resume;
-import storage.ArrayStorage;
+import storage.SortedArrayStorage;
+import storage.Storage;
 
 /**
  * Test for com.urise.webapp.storage.storage.ArrayStorage
  */
 public class MainTestArrayStorage {
-    static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
+    //private static final Storage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume();
