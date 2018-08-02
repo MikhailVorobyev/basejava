@@ -1,5 +1,7 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.exeption.ExistStorageException;
+import ru.javawebinar.basejava.exeption.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 
@@ -26,7 +28,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void save(Resume r) {
         int index = findElementIndex(r.getUuid());
         if (index >= 0) {
-            System.out.println("Resume " + r.getUuid() + " already exists!");
+            throw new ExistStorageException(r.getUuid());
         } else if (size == STORAGE_LIMIT) {
             System.out.println("The array is full");
         } else {
@@ -39,7 +41,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void delete(String uuid) {
         int index = findElementIndex(uuid);
         if (index < 0) {
-            System.out.println("Resume " + uuid + " does not exist!");
+            throw new NotExistStorageException(uuid);
         } else {
             deleteElement(index);
             storage[size - 1] = null;
@@ -51,7 +53,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void update(Resume r) {
         int index = findElementIndex(r.getUuid());
         if (index < 0) {
-            System.out.println("Resume " + r.getUuid() + " does not exist!");
+            throw new NotExistStorageException(r.getUuid());
         } else {
             storage[index] = r;
             System.out.println("Update was successful");
@@ -62,8 +64,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public Resume get(String uuid) {
         int index = findElementIndex(uuid);
         if (index < 0) {
-            System.out.println("Resume " + uuid + " does not exist!");
-            return null;
+            throw new NotExistStorageException(uuid);
         } else {
             return storage[index];
         }
