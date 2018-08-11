@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveElement(Resume r, int index) {
+    protected void insertElement(Resume r, int index) {
         int indexToPut = -index - 1;
         if (indexToPut < size) {
             System.arraycopy(storage, indexToPut, storage, indexToPut + 1, size - indexToPut);
@@ -16,7 +16,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void deleteElement(int index) {
+    protected void copyElement(int index) {
         int copyLength = size - 1 - index;
         if (copyLength > 0) {
             System.arraycopy(storage, index + 1, storage, index, copyLength);
