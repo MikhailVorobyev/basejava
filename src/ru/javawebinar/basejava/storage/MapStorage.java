@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
-    private Map<String, Resume> storage = new HashMap<>();
+    private Map<String, Resume> storage = new HashMap<>(); //key for Map - uuid
 
     @Override
     public void clear() {
@@ -19,23 +19,23 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public void saveElement(Resume r) {
+    public void saveElement(Resume resume, int index) {
 
     }
 
     @Override
-    public void updateElement(Resume r) {
+    public void deleteElement(String uuid, int index) {
 
     }
 
     @Override
-    public Resume getElement(String uuid) {
+    public void updateElement(Resume resume, int index) {
+
+    }
+
+    @Override
+    public Resume getElement(String uuid, int index) {
         return null;
-    }
-
-    @Override
-    public void deleteElement(String uuid) {
-
     }
 
     @Override
@@ -46,5 +46,9 @@ public class MapStorage extends AbstractStorage {
     @Override
     protected boolean containsElement(String uuid) {
         return false;
+    }
+
+    protected int findElementIndex(String uuid) {
+        return 0;
     }
 }

@@ -7,11 +7,12 @@ import ru.javawebinar.basejava.model.Resume;
 public abstract class AbstractStorage implements Storage {
 
     @Override
-    public void save(Resume r) {
-        if (containsElement(r.getUuid())) {
-            throw new ExistStorageException(r.getUuid());
+    public void save(Resume resume) {
+        if (containsElement(resume.getUuid())) {
+            throw new ExistStorageException(resume.getUuid());
         }
-        saveElement(r);
+        int index = findElementIndex(resume.getUuid());
+        saveElement(resume, index);
     }
 
     @Override
@@ -19,15 +20,17 @@ public abstract class AbstractStorage implements Storage {
         if (!containsElement(uuid)) {
             throw new NotExistStorageException(uuid);
         }
-        deleteElement(uuid);
+        int index = findElementIndex(uuid);
+        deleteElement(uuid, index);
     }
 
     @Override
-    public void update(Resume r) {
-        if (!containsElement(r.getUuid())) {
-            throw new NotExistStorageException(r.getUuid());
+    public void update(Resume resume) {
+        if (!containsElement(resume.getUuid())) {
+            throw new NotExistStorageException(resume.getUuid());
         }
-        updateElement(r);
+        int index = findElementIndex(resume.getUuid());
+        updateElement(resume, index);
     }
 
     @Override
@@ -35,17 +38,19 @@ public abstract class AbstractStorage implements Storage {
         if (!containsElement(uuid)) {
             throw new NotExistStorageException(uuid);
         }
-        return getElement(uuid);
+        int index = findElementIndex(uuid);
+        return getElement(uuid, index);
     }
 
     protected abstract boolean containsElement(String uuid);
 
-    protected abstract void updateElement(Resume r);
+    protected abstract int findElementIndex(String uuid);
 
-    protected abstract Resume getElement(String uuid);
+    protected abstract void updateElement(Resume resume, int index);
 
-    protected abstract void deleteElement(String uuid);
+    protected abstract Resume getElement(String uuid, int index);
 
-    protected abstract void saveElement(Resume r);
+    protected abstract void deleteElement(String uuid, int index);
 
+    protected abstract void saveElement(Resume resume, int index);
 }

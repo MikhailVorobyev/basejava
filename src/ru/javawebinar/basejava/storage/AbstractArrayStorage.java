@@ -5,9 +5,6 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
 
-/**
- * Array based storage for Resumes
- */
 public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
@@ -25,33 +22,29 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveElement(Resume r) {
-        int index = findElementIndex(r.getUuid());
+    protected void saveElement(Resume resume, int index) {
         if (size == STORAGE_LIMIT) {
-            throw new StorageException("The array is full!", r.getUuid());
+            throw new StorageException("The array is full!", resume.getUuid());
         } else {
-            insertElement(r, index);
+            insertElement(resume, index);
             size++;
         }
     }
 
     @Override
-    protected void deleteElement(String uuid) {
-        int index = findElementIndex(uuid);
-        copyElement(index);
+    protected void deleteElement(String uuid, int index) {
+        replaceElement(index);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
-    protected void updateElement(Resume r) {
-        int index = findElementIndex(r.getUuid());
-        storage[index] = r;
+    protected void updateElement(Resume resume, int index) {
+        storage[index] = resume;
     }
 
     @Override
-    protected Resume getElement(String uuid) {
-        int index = findElementIndex(uuid);
+    protected Resume getElement(String uuid, int index) {
         return storage[index];
     }
 
@@ -64,9 +57,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return findElementIndex(uuid) >= 0;
     }
 
-    protected abstract int findElementIndex(String uuid);
+    protected abstract void insertElement(Resume resume, int index);
 
-    protected abstract void insertElement(Resume r, int index);
-
-    protected abstract void copyElement(int index);
+    protected abstract void replaceElement(int index);
 }

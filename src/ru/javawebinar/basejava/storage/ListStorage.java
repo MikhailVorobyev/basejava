@@ -19,25 +19,22 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveElement(Resume r) {
-        storage.add(r);
+    protected void saveElement(Resume resume, int index) {
+        storage.add(resume);
     }
 
     @Override
-    protected void deleteElement(String uuid) {
-        int index = findElementIndex(uuid);
+    protected void deleteElement(String uuid, int index) {
         storage.remove(index);
     }
 
     @Override
-    protected void updateElement(Resume r) {
-        int index = findElementIndex(r.getUuid());
-        storage.set(index, r);
+    protected void updateElement(Resume resume, int index) {
+        storage.set(index, resume);
     }
 
     @Override
-    protected Resume getElement(String uuid) {
-        int index = findElementIndex(uuid);
+    protected Resume getElement(String uuid, int index) {
         return storage.get(index);
     }
 
@@ -46,11 +43,13 @@ public class ListStorage extends AbstractStorage {
         return storage.toArray(new Resume[0]);
     }
 
+    @Override
     protected boolean containsElement(String uuid) {
         return storage.contains(new Resume(uuid));
     }
 
-    private int findElementIndex(String uuid) {
+    @Override
+    protected int findElementIndex(String uuid) {
         return storage.indexOf(new Resume(uuid));
     }
 }
