@@ -8,49 +8,54 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void save(Resume resume) {
-        if (containsElement(resume.getUuid())) {
-            throw new ExistStorageException(resume.getUuid());
-        }
-        int index = findElementIndex(resume.getUuid());
-        saveElement(resume, index);
+        Object elementKey = checkExistElement(resume.getUuid());
+        saveElement(resume, elementKey);
     }
 
     @Override
     public void delete(String uuid) {
-        if (!containsElement(uuid)) {
-            throw new NotExistStorageException(uuid);
-        }
-        int index = findElementIndex(uuid);
-        deleteElement(uuid, index);
+        Object elementKey = checkNotExistElement(uuid);
+        deleteElement(elementKey);
     }
 
     @Override
     public void update(Resume resume) {
-        if (!containsElement(resume.getUuid())) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-        int index = findElementIndex(resume.getUuid());
-        updateElement(resume, index);
+        Object elementKey = checkNotExistElement(resume.getUuid());
+        updateElement(resume, elementKey);
     }
 
     @Override
     public Resume get(String uuid) {
-        if (!containsElement(uuid)) {
-            throw new NotExistStorageException(uuid);
-        }
-        int index = findElementIndex(uuid);
-        return getElement(uuid, index);
+        Object elementKey = checkNotExistElement(uuid);
+        return getElement(elementKey);
     }
 
-    protected abstract boolean containsElement(String uuid);
+    private Object checkExistElement(String uuid) {
+        Object foundKey = findElementKey(uuid);
+        if (containsElement(foundKey)) {
+            throw new ExistStorageException(uuid);
+        }
+        return foundKey;
+    }
 
-    protected abstract int findElementIndex(String uuid);
+    private Object checkNotExistElement(String uuid) {
+        Object foundKey = findElementKey(uuid);
+        if (!containsElement(foundKey)) {
+            throw new NotExistStorageException(uuid);
+        }
+        return foundKey;
+    }
 
-    protected abstract void updateElement(Resume resume, int index);
+    protected abstract boolean containsElement(Object foundKey);
 
-    protected abstract Resume getElement(String uuid, int index);
+    protected abstract Object findElementKey(String uuid);
 
-    protected abstract void deleteElement(String uuid, int index);
+    protected abstract void updateElement(Resume resume, Object elementKey);
 
-    protected abstract void saveElement(Resume resume, int index);
+    protected abstract Resume getElement(Object elementKey);
+
+    protected abstract void deleteElement(Object elementKey);
+
+    protected abstract void saveElement(Resume resume, Object elementKey);
 }
+

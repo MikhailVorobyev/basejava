@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
-    private Map<String, Resume> storage = new HashMap<>(); //key for Map - uuid
+    private final Map<String, Resume> storage = new HashMap<>(); //key for Map - uuid
 
     @Override
     public void clear() {
-
+        storage.clear();
     }
 
     @Override
@@ -19,22 +19,22 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public void saveElement(Resume resume, int index) {
+    public void saveElement(Resume resume, Object key) {
 
     }
 
     @Override
-    public void deleteElement(String uuid, int index) {
+    public void deleteElement(Object key) {
 
     }
 
     @Override
-    public void updateElement(Resume resume, int index) {
+    public void updateElement(Resume resume, Object key) {
 
     }
 
     @Override
-    public Resume getElement(String uuid, int index) {
+    public Resume getElement(Object key) {
         return null;
     }
 
@@ -44,11 +44,12 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean containsElement(String uuid) {
+    protected boolean containsElement(Object foundKey) {
         return false;
     }
 
-    protected int findElementIndex(String uuid) {
-        return 0;
+    @Override
+    protected Object findElementKey(String uuid) {
+        return null;
     }
 }
