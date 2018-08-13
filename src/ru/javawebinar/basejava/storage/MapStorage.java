@@ -15,41 +15,41 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public int size() {
-        return 0;
+        return storage.size();
     }
 
     @Override
     public void saveElement(Resume resume, Object key) {
-
+        storage.put((String) key, resume);
     }
 
     @Override
     public void deleteElement(Object key) {
-
+        storage.remove(key);
     }
 
     @Override
     public void updateElement(Resume resume, Object key) {
-
+        storage.put((String) key, resume);
     }
 
     @Override
     public Resume getElement(Object key) {
-        return null;
+        return storage.get(key);
     }
 
     @Override
     public Resume[] getAll() {
-        return null;
+        return storage.values().toArray(new Resume[0]);
     }
 
     @Override
     protected boolean containsElement(Object foundKey) {
-        return false;
+        return storage.containsKey(foundKey);
     }
 
     @Override
     protected Object findElementKey(String uuid) {
-        return null;
+        return uuid;
     }
 }
