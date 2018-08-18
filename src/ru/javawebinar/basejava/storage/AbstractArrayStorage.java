@@ -4,6 +4,7 @@ import ru.javawebinar.basejava.exeption.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10000;
@@ -26,39 +27,43 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("The array is full!", resume.getUuid());
         } else {
-            insertElement(resume, (int) index);
+            insertElement(resume, (Integer) index);
             size++;
         }
     }
 
     @Override
     protected void deleteElement(Object index) {
-        replaceElement((int) index);
+        replaceElement((Integer) index);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
     protected void updateElement(Resume resume, Object index) {
-        storage[(int) index] = resume;
+        storage[(Integer) index] = resume;
     }
 
     @Override
     protected Resume getElement(Object index) {
-        return storage[(int) index];
+        return storage[(Integer) index];
     }
 
     @Override
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
+    public List<Resume> getAllSorted() {
+        List<Resume> resumes = Arrays.asList(Arrays.copyOf(storage, size));
+        sortList(resumes);
+        return resumes;
     }
 
     @Override
-    protected boolean containsElement(Object foundKey) {
-        return (int) foundKey >= 0;
+    protected boolean containsElement(Object elementKey) {
+        return (int) elementKey >= 0;
     }
 
     protected abstract void insertElement(Resume resume, int index);
 
     protected abstract void replaceElement(int index);
+
+    protected abstract void sortList(List<Resume> list);
 }

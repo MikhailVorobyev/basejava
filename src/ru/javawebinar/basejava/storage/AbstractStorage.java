@@ -8,45 +8,45 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void save(Resume resume) {
-        Object elementKey = checkExistElement(resume.getUuid());
+        Object elementKey = getExistElementKey(resume.getUuid());
         saveElement(resume, elementKey);
     }
 
     @Override
     public void delete(String uuid) {
-        Object elementKey = checkNotExistElement(uuid);
+        Object elementKey = getNotExistElementKey(uuid);
         deleteElement(elementKey);
     }
 
     @Override
     public void update(Resume resume) {
-        Object elementKey = checkNotExistElement(resume.getUuid());
+        Object elementKey = getNotExistElementKey(resume.getUuid());
         updateElement(resume, elementKey);
     }
 
     @Override
     public Resume get(String uuid) {
-        Object elementKey = checkNotExistElement(uuid);
+        Object elementKey = getNotExistElementKey(uuid);
         return getElement(elementKey);
     }
 
-    private Object checkExistElement(String uuid) {
-        Object foundKey = findElementKey(uuid);
-        if (containsElement(foundKey)) {
+    private Object getExistElementKey(String uuid) {
+        Object elementKey = findElementKey(uuid);
+        if (containsElement(elementKey)) {
             throw new ExistStorageException(uuid);
         }
-        return foundKey;
+        return elementKey;
     }
 
-    private Object checkNotExistElement(String uuid) {
-        Object foundKey = findElementKey(uuid);
-        if (!containsElement(foundKey)) {
+    private Object getNotExistElementKey(String uuid) {
+        Object elementKey = findElementKey(uuid);
+        if (!containsElement(elementKey)) {
             throw new NotExistStorageException(uuid);
         }
-        return foundKey;
+        return elementKey;
     }
 
-    protected abstract boolean containsElement(Object foundKey);
+    protected abstract boolean containsElement(Object elementKey);
 
     protected abstract Object findElementKey(String uuid);
 
