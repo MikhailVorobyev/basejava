@@ -12,9 +12,9 @@ public class MainTestArrayStorage {
     //private static final Storage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
-        Resume resume1 = new Resume("uuid1");
-        Resume resume2 = new Resume("uuid2");
-        Resume resume3 = new Resume("uuid3");
+        Resume resume1 = new Resume("uuid1", "fullName1");
+        Resume resume2 = new Resume("uuid2", "fullName2");
+        Resume resume3 = new Resume("uuid3", "fullName3");
 
         ARRAY_STORAGE.save(resume1);
         ARRAY_STORAGE.save(resume2);
@@ -29,10 +29,10 @@ public class MainTestArrayStorage {
         ARRAY_STORAGE.delete(resume1.getUuid());
         printAll();
 
-        Resume updateR3 = new Resume("uuid3");
+        Resume updateR3 = new Resume("uuid3", "fullName3");
         ARRAY_STORAGE.update(resume3);
 
-        Resume dummy = new Resume("uuid4");
+        Resume dummy = new Resume("uuid4", "fullName4");
         ARRAY_STORAGE.update(dummy);
 
         ARRAY_STORAGE.clear();

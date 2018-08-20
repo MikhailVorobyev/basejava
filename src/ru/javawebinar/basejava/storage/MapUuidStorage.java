@@ -61,6 +61,6 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     protected Resume findElementKey(String uuid) {
-        return new Resume(uuid);
+        return new Resume(uuid, null);
     }
 }
