@@ -1,9 +1,7 @@
 package ru.javawebinar.basejava.storage;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import ru.javawebinar.basejava.exeption.ExistStorageException;
 import ru.javawebinar.basejava.exeption.NotExistStorageException;
 import ru.javawebinar.basejava.exeption.StorageException;
@@ -16,7 +14,7 @@ import static junit.framework.TestCase.assertEquals;
 
 
 public class AbstractStorageTest {
-    private Storage storage;
+    protected Storage storage;
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
@@ -74,18 +72,6 @@ public class AbstractStorageTest {
         storage.save(RESUME_1);
     }
 
-    @Category(ArrayCategory.class)
-    @Test(expected = StorageException.class)
-    public void saveOverflow() {
-        storage.clear();
-        try {
-            fillingStorage();
-        } catch (StorageException e) {
-            Assert.fail("The test is failed");
-        }
-        storage.save(new Resume());
-    }
-
     @Test(expected = NotExistStorageException.class)
     public void delete() throws Exception {
         storage.delete(UUID_1);
@@ -138,7 +124,7 @@ public class AbstractStorageTest {
         assertEquals(size, storage.size());
     }
 
-    private void fillingStorage() throws StorageException {
+    protected void fillingStorage() throws StorageException {
         for (int i = 0; i < 10000; i++) {
             storage.save(new Resume());
 

@@ -19,7 +19,7 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void sortList(List<Resume> list) {
-        Collections.sort(list);
+        Collections.sort(list, Resume.getResumeComparator());
     }
 
     @Override
