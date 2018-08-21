@@ -54,6 +54,7 @@ public class AbstractStorageTest {
     public void size() {
         assertSize(3);
     }
+
     @Test
     public void clear() {
         storage.clear();
@@ -71,6 +72,8 @@ public class AbstractStorageTest {
     public void saveAlreadyExist() {
         storage.save(RESUME_1);
     }
+
+
 
     @Test(expected = NotExistStorageException.class)
     public void delete() throws Exception {

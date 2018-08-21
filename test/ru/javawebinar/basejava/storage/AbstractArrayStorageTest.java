@@ -6,7 +6,8 @@ import ru.javawebinar.basejava.exeption.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 public class AbstractArrayStorageTest extends AbstractStorageTest {
-    public AbstractArrayStorageTest(Storage storage) {
+
+    protected AbstractArrayStorageTest(Storage storage) {
         super(storage);
     }
 
