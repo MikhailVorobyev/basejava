@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.basejava.exeption.ExistStorageException;
 import ru.javawebinar.basejava.exeption.NotExistStorageException;
-import ru.javawebinar.basejava.exeption.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
@@ -22,7 +21,7 @@ public class AbstractStorageTest {
     private static final String UUID_4 = "uuid4";
 
     private static final String FULL_NAME_1 = "fullName2";
-    private static final String FULL_NAME_2 = "fullName2";
+    private static final String FULL_NAME_2 = "fullName3";
     private static final String FULL_NAME_3 = "fullName3";
     private static final String FULL_NAME_4 = "fullName4";
 
@@ -76,14 +75,14 @@ public class AbstractStorageTest {
 
 
     @Test(expected = NotExistStorageException.class)
-    public void delete() throws Exception {
+    public void delete() {
         storage.delete(UUID_1);
         assertSize(2);
         storage.get(UUID_1);
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void deleteNotExist() throws Exception {
+    public void deleteNotExist() {
         storage.delete(UUID_4);
     }
 
@@ -95,7 +94,7 @@ public class AbstractStorageTest {
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void updateNotExist() throws Exception {
+    public void updateNotExist() {
         storage.update(new Resume(UUID_4, FULL_NAME_4));
     }
 
@@ -125,12 +124,5 @@ public class AbstractStorageTest {
 
     private void assertSize(int size) {
         assertEquals(size, storage.size());
-    }
-
-    protected void fillingStorage() throws StorageException {
-        for (int i = 0; i < 10000; i++) {
-            storage.save(new Resume());
-
-        }
     }
 }

@@ -2,6 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,8 +19,10 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void sortList(List<Resume> list) {
-        Collections.sort(list, Resume.getResumeComparator());
+    protected List<Resume> getSortedList() {
+        List<Resume> resumeList = Arrays.asList(Arrays.copyOf(storage, size));
+        Collections.sort(resumeList);
+        return resumeList;
     }
 
     @Override

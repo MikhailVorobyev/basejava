@@ -4,10 +4,9 @@ import ru.javawebinar.basejava.exeption.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
-import java.util.List;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
-    protected static final int STORAGE_LIMIT = 10000;
+    protected static final int STORAGE_LIMIT = 10;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size;
 
@@ -50,13 +49,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> resumes = Arrays.asList(Arrays.copyOf(storage, size));
-        sortList(resumes);
-        return resumes;
-    }
-
-    @Override
     protected boolean containsElement(Object elementKey) {
         return (int) elementKey >= 0;
     }
@@ -65,5 +57,4 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected abstract void replaceElement(int index);
 
-    protected abstract void sortList(List<Resume> list);
 }

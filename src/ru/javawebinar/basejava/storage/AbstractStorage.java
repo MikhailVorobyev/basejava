@@ -4,33 +4,39 @@ import ru.javawebinar.basejava.exeption.ExistStorageException;
 import ru.javawebinar.basejava.exeption.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
 
     @Override
     public void save(Resume resume) {
-        Object elementKey = getExistElementKey(resume.getUuid());
+        Object elementKey = getNotExistElementKey(resume.getUuid());
         saveElement(resume, elementKey);
     }
 
     @Override
     public void delete(String uuid) {
-        Object elementKey = getNotExistElementKey(uuid);
+        Object elementKey = getExistElementKey(uuid);
         deleteElement(elementKey);
     }
 
     @Override
     public void update(Resume resume) {
-        Object elementKey = getNotExistElementKey(resume.getUuid());
+        Object elementKey = getExistElementKey(resume.getUuid());
         updateElement(resume, elementKey);
     }
 
     @Override
     public Resume get(String uuid) {
-        Object elementKey = getNotExistElementKey(uuid);
+        Object elementKey = getExistElementKey(uuid);
         return getElement(elementKey);
     }
 
-    private Object getExistElementKey(String uuid) {
+    public List<Resume> getAllSorted() {
+        return getSortedList();
+    }
+
+    private Object getNotExistElementKey(String uuid) {
         Object elementKey = findElementKey(uuid);
         if (containsElement(elementKey)) {
             throw new ExistStorageException(uuid);
@@ -38,7 +44,7 @@ public abstract class AbstractStorage implements Storage {
         return elementKey;
     }
 
-    private Object getNotExistElementKey(String uuid) {
+    private Object getExistElementKey(String uuid) {
         Object elementKey = findElementKey(uuid);
         if (!containsElement(elementKey)) {
             throw new NotExistStorageException(uuid);
@@ -57,5 +63,7 @@ public abstract class AbstractStorage implements Storage {
     protected abstract void deleteElement(Object elementKey);
 
     protected abstract void saveElement(Resume resume, Object elementKey);
+
+    protected abstract List<Resume> getSortedList();
 }
 
