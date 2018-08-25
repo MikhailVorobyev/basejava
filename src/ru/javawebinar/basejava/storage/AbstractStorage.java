@@ -4,6 +4,7 @@ import ru.javawebinar.basejava.exeption.ExistStorageException;
 import ru.javawebinar.basejava.exeption.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
@@ -33,7 +34,9 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public List<Resume> getAllSorted() {
-        return getSortedList();
+        List<Resume> resumeList = getResumeList();
+        Collections.sort(resumeList);
+        return resumeList;
     }
 
     private Object getNotExistElementKey(String uuid) {
@@ -64,6 +67,6 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract void saveElement(Resume resume, Object elementKey);
 
-    protected abstract List<Resume> getSortedList();
+    protected abstract List<Resume> getResumeList();
 }
 

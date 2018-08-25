@@ -16,8 +16,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         }
 */
 
-    private static final Comparator<Resume> RESUME_COMPARATOR =
-            (resume1, resume2) -> resume1.getUuid().compareTo(resume2.getUuid());
+    private static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getUuid);
 
     @Override
     protected void insertElement(Resume resume, int index) {
@@ -39,7 +38,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected List<Resume> getSortedList() {
+    protected List<Resume> getResumeList() {
         return Arrays.asList(Arrays.copyOf(storage, size));
     }
 

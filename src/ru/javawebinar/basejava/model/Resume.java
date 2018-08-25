@@ -1,22 +1,12 @@
 package ru.javawebinar.basejava.model;
 
 
-import java.util.UUID;
-
 public class Resume implements Comparable<Resume> {
 
     // Unique identifier
     private String uuid;
 
     private String fullName;
-
-    public Resume() {
-        uuid = UUID.randomUUID().toString();
-    }
-
-    public Resume(String uuid) {
-        this.uuid = uuid;
-    }
 
     public Resume(String uuid, String fullName) {
         this.uuid = uuid;
@@ -39,7 +29,6 @@ public class Resume implements Comparable<Resume> {
         this.uuid = uuid;
     }
 
-
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
@@ -48,27 +37,28 @@ public class Resume implements Comparable<Resume> {
         Resume resume = (Resume) object;
 
         if (!uuid.equals(resume.uuid)) return false;
-        //return fullName != null ? fullName.equals(resume.fullName) : resume.fullName == null;
-        return true;
+        return fullName != null ? fullName.equals(resume.fullName) : resume.fullName == null;
     }
 
     @Override
     public int hashCode() {
         int result = uuid.hashCode();
-        //result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
+        result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return uuid;
+        return "Resume{" +
+                "uuid='" + uuid + '\'' +
+                ", fullName='" + fullName + '\'' +
+                '}';
     }
 
     @Override
     public int compareTo(Resume resume) {
-        if (fullName.compareTo(resume.fullName) == 0) {
-            return uuid.compareTo(resume.uuid);
-        }
-        return fullName.compareTo(resume.fullName);
+        return fullName.compareTo(resume.fullName) == 0
+                ? uuid.compareTo(resume.uuid)
+                : fullName.compareTo(resume.fullName);
     }
 }
