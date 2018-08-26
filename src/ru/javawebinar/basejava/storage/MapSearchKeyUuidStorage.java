@@ -5,32 +5,32 @@ import ru.javawebinar.basejava.model.Resume;
 public class MapSearchKeyUuidStorage extends AbstractMapStorage {
 
     @Override
-    public void saveElement(Resume resume, Object elementKey) {
-        storage.put(((Resume) elementKey).getUuid(), resume);
+    protected void saveElement(Resume resume, Object uuidKey) {
+        storage.put((String) uuidKey, resume);
     }
 
     @Override
-    public void deleteElement(Object elementKey) {
-        storage.remove(((Resume) elementKey).getUuid());
+    protected void deleteElement(Object uuidKey) {
+        storage.remove(uuidKey);
     }
 
     @Override
-    public void updateElement(Resume resume, Object elementKey) {
-        storage.put(((Resume) elementKey).getUuid(), resume);
+    protected void updateElement(Resume resume, Object uuidKey) {
+        storage.put((String) uuidKey, resume);
     }
 
     @Override
-    public Resume getElement(Object elementKey) {
-        return storage.get(((Resume) elementKey).getUuid());
+    protected Resume getElement(Object uuidKey) {
+        return storage.get(uuidKey);
     }
 
     @Override
-    protected boolean containsElement(Object elementKey) {
-        return storage.containsKey(((Resume) elementKey).getUuid());
+    protected boolean containsElement(Object uuidKey) {
+        return storage.containsKey(uuidKey);
     }
 
     @Override
-    protected Resume findElementKey(String uuid) {
-        return new Resume(uuid, null);
+    protected String findElementKey(String uuid) {
+        return uuid;
     }
 }
