@@ -30,7 +30,7 @@ public class MapSearchKeyUuidStorage extends AbstractMapStorage {
     }
 
     @Override
-    protected String findElementKey(String uuid) {
+    protected String getSearchKey(String uuid) {
         return uuid;
     }
 }

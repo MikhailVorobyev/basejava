@@ -49,8 +49,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean containsElement(Object elementKey) {
-        return (int) elementKey >= 0;
+    protected boolean containsElement(Object index) {
+        return (int) index >= 0;
     }
 
     protected abstract void insertElement(Resume resume, int index);

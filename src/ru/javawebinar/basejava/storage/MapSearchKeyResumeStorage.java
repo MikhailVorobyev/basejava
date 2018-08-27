@@ -6,7 +6,7 @@ public class MapSearchKeyResumeStorage extends AbstractMapStorage {
 
     @Override
     public void saveElement(Resume resume, Object resumeKey) {
-        storage.put(((Resume) resumeKey).getUuid(), resume);
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
@@ -16,21 +16,21 @@ public class MapSearchKeyResumeStorage extends AbstractMapStorage {
 
     @Override
     public void updateElement(Resume resume, Object resumeKey) {
-        storage.put(((Resume) resumeKey).getUuid(), resume);
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
     public Resume getElement(Object resumeKey) {
-        return storage.get(((Resume) resumeKey).getUuid());
+        return (Resume) resumeKey;
     }
 
     @Override
     protected boolean containsElement(Object resumeKey) {
-        return storage.containsKey(((Resume) resumeKey).getUuid());
+        return resumeKey != null;
     }
 
     @Override
-    protected Resume findElementKey(String uuid) {
-        return new Resume(uuid, null);
+    protected Resume getSearchKey(String uuid) {
+        return storage.get(uuid);
     }
 }

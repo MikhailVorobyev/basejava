@@ -11,26 +11,26 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void save(Resume resume) {
-        Object elementKey = getNotExistElementKey(resume.getUuid());
-        saveElement(resume, elementKey);
+        Object searchKey = getNotExistSearchKey(resume.getUuid());
+        saveElement(resume, searchKey);
     }
 
     @Override
     public void delete(String uuid) {
-        Object elementKey = getExistElementKey(uuid);
-        deleteElement(elementKey);
+        Object searchKey = getExistSearchKey(uuid);
+        deleteElement(searchKey);
     }
 
     @Override
     public void update(Resume resume) {
-        Object elementKey = getExistElementKey(resume.getUuid());
-        updateElement(resume, elementKey);
+        Object searchKey = getExistSearchKey(resume.getUuid());
+        updateElement(resume, searchKey);
     }
 
     @Override
     public Resume get(String uuid) {
-        Object elementKey = getExistElementKey(uuid);
-        return getElement(elementKey);
+        Object searchKey = getExistSearchKey(uuid);
+        return getElement(searchKey);
     }
 
     public List<Resume> getAllSorted() {
@@ -39,25 +39,25 @@ public abstract class AbstractStorage implements Storage {
         return resumeList;
     }
 
-    private Object getNotExistElementKey(String uuid) {
-        Object elementKey = findElementKey(uuid);
-        if (containsElement(elementKey)) {
+    private Object getNotExistSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (containsElement(searchKey)) {
             throw new ExistStorageException(uuid);
         }
-        return elementKey;
+        return searchKey;
     }
 
-    private Object getExistElementKey(String uuid) {
-        Object elementKey = findElementKey(uuid);
-        if (!containsElement(elementKey)) {
+    private Object getExistSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (!containsElement(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
-        return elementKey;
+        return searchKey;
     }
 
     protected abstract boolean containsElement(Object elementKey);
 
-    protected abstract Object findElementKey(String uuid);
+    protected abstract Object getSearchKey(String uuid);
 
     protected abstract void updateElement(Resume resume, Object elementKey);
 
