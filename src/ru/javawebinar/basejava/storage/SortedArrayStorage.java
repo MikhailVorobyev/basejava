@@ -4,7 +4,6 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 /*
@@ -25,7 +24,6 @@ public class SortedArrayStorage extends AbstractArrayStorage {
             System.arraycopy(storage, indexToPut, storage, indexToPut + 1, size - indexToPut);
         }
         storage[indexToPut] = resume;
-
     }
 
     @Override
@@ -34,17 +32,11 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         if (copyLength > 0) {
             System.arraycopy(storage, index + 1, storage, index, copyLength);
         }
-
-    }
-
-    @Override
-    protected List<Resume> getResumeList() {
-        return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        Resume searchKey = new Resume(uuid, null);
+        Resume searchKey = new Resume(uuid, "dummy");
         return Arrays.binarySearch(storage, 0, size, searchKey, RESUME_COMPARATOR);
     }
 }

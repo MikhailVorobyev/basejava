@@ -4,6 +4,7 @@ import ru.javawebinar.basejava.exeption.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10;
@@ -46,6 +47,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected Resume getElement(Object index) {
         return storage[(Integer) index];
+    }
+
+    @Override
+    protected List<Resume> getCopyResumeList() {
+        return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
     @Override

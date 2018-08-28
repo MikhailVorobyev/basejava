@@ -11,7 +11,7 @@ public class MapSearchKeyUuidStorage extends AbstractMapStorage {
 
     @Override
     protected void deleteElement(Object uuidKey) {
-        storage.remove(uuidKey);
+        storage.remove((String) uuidKey);
     }
 
     @Override
@@ -21,12 +21,12 @@ public class MapSearchKeyUuidStorage extends AbstractMapStorage {
 
     @Override
     protected Resume getElement(Object uuidKey) {
-        return storage.get(uuidKey);
+        return storage.get((String) uuidKey);
     }
 
     @Override
     protected boolean containsElement(Object uuidKey) {
-        return storage.containsKey(uuidKey);
+        return storage.containsKey((String) uuidKey);
     }
 
     @Override

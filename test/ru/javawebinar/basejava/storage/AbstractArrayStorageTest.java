@@ -19,12 +19,12 @@ public class AbstractArrayStorageTest extends AbstractStorageTest {
         } catch (StorageException e) {
             Assert.fail("The test is failed");
         }
-        storage.save(new Resume("uuid", "fullName"));
+        storage.save(new Resume("Overflow"));
     }
 
     private void fillingStorage() throws StorageException {
         for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-            storage.save(new Resume("uuid" + i, "fullName"));
+            storage.save(new Resume("fullName" + i));
         }
     }
 }

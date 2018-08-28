@@ -39,7 +39,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getResumeList() {
+    public List<Resume> getCopyResumeList() {
         return new ArrayList<>(storage);
     }
 
