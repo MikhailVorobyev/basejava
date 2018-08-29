@@ -2,31 +2,52 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
-public class MapSearchKeyUuidStorage extends AbstractMapStorage {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class MapSearchKeyUuidStorage extends AbstractStorage<String> {
+    Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    protected void saveElement(Resume resume, Object uuidKey) {
-        storage.put((String) uuidKey, resume);
+    public void clear() {
+        storage.clear();
     }
 
     @Override
-    protected void deleteElement(Object uuidKey) {
-        storage.remove((String) uuidKey);
+    public int size() {
+        return storage.size();
+    }
+    
+    @Override
+    protected void saveElement(Resume resume, String uuidKey) {
+        storage.put(uuidKey, resume);
     }
 
     @Override
-    protected void updateElement(Resume resume, Object uuidKey) {
-        storage.put((String) uuidKey, resume);
+    protected void deleteElement(String uuidKey) {
+        storage.remove(uuidKey);
     }
 
     @Override
-    protected Resume getElement(Object uuidKey) {
-        return storage.get((String) uuidKey);
+    protected void updateElement(Resume resume, String uuidKey) {
+        storage.put(uuidKey, resume);
     }
 
     @Override
-    protected boolean containsElement(Object uuidKey) {
-        return storage.containsKey((String) uuidKey);
+    protected Resume getElement(String uuidKey) {
+        return storage.get(uuidKey);
+    }
+
+    @Override
+    public List<Resume> getCopyResumeList() {
+        return new ArrayList<>(storage.values());
+    }
+    
+    @Override
+    protected boolean containsElement(String uuidKey) {
+        return storage.containsKey(uuidKey);
     }
 
     @Override
