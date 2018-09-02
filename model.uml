@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>ru.javawebinar.basejava.model</OriginalElement>
+  <nodes>
+    <node x="162.0" y="80.0">ru.javawebinar.basejava.model.StringSection</node>
+    <node x="300.0" y="80.0">ru.javawebinar.basejava.model.ArrayStringSection</node>
+    <node x="466.0" y="80.0">ru.javawebinar.basejava.model.EducationSection</node>
+    <node x="292.0" y="155.0">ru.javawebinar.basejava.model.Contact</node>
+    <node x="254.0" y="0.0">ru.javawebinar.basejava.model.Section</node>
+    <node x="157.0" y="155.0">ru.javawebinar.basejava.model.Resume</node>
+    <node x="0.0" y="80.0">ru.javawebinar.basejava.model.ExperienceSection</node>
+    <node x="0.0" y="155.0">ru.javawebinar.basejava.model.SectionType</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="ru.javawebinar.basejava.model.ArrayStringSection" target="ru.javawebinar.basejava.model.Section">
+      <point x="0.0" y="-15.0" />
+      <point x="373.0" y="60.0" />
+      <point x="307.75" y="60.0" />
+      <point x="10.75" y="15.0" />
+    </edge>
+    <edge source="ru.javawebinar.basejava.model.StringSection" target="ru.javawebinar.basejava.model.Section">
+      <point x="0.0" y="-15.0" />
+      <point x="221.0" y="60.0" />
+      <point x="286.25" y="60.0" />
+      <point x="-10.75" y="15.0" />
+    </edge>
+    <edge source="ru.javawebinar.basejava.model.EducationSection" target="ru.javawebinar.basejava.model.Section">
+      <point x="0.0" y="-15.0" />
+      <point x="535.0" y="50.0" />
+      <point x="329.25" y="50.0" />
+      <point x="32.25" y="15.0" />
+    </edge>
+    <edge source="ru.javawebinar.basejava.model.ExperienceSection" target="ru.javawebinar.basejava.model.Section">
+      <point x="0.0" y="-15.0" />
+      <point x="71.0" y="50.0" />
+      <point x="264.75" y="50.0" />
+      <point x="-32.25" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="302.0" y="92.5" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
