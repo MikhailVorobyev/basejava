@@ -10,9 +10,9 @@ public class Resume implements Comparable<Resume> {
 
     private final String fullName;
 
-    private Map<String, Contact> contacts = new HashMap<>();
+    private Map<String, String> contacts = new HashMap<>();
 
-    private Map<Enum<SectionType>, Section> sections = new HashMap<>();
+    private Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -33,19 +33,19 @@ public class Resume implements Comparable<Resume> {
         return uuid;
     }
 
-    public Map<String, Contact> getContacts() {
+    public Map<String, String> getContacts() {
         return new HashMap<>(contacts);
     }
 
-    public Map<Enum<SectionType>, Section> getSections() {
-        return new HashMap<>(sections);
+    public Map<SectionType, Section> getSections() {
+        return new EnumMap<>(sections);
     }
 
-    public void addSection(Enum<SectionType> enumSection, Section section) {
+    public void addSection(SectionType enumSection, Section section) {
         sections.put(enumSection, section);
     }
 
-    public void addContact(String contactName, Contact contact) {
+    public void addContact(String contactName, String contact) {
         contacts.put(contactName, contact);
     }
 
