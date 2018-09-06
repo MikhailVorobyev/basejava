@@ -3,25 +3,24 @@ package ru.javawebinar.basejava;
 import ru.javawebinar.basejava.model.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class TestResume {
     public static void main(String[] args) {
         Resume resume = new Resume("Григорий Кислин");
-        resume.addContact("Телефон", "+7(921) 855-0482");
-        resume.addContact("Skype", "skype:grigory.kislin");
-        resume.addContact("Почта", "gkislin@yandex.ru");
-        resume.addContact("LinkedIn", "https://www.linkedin.com/in/gkislin");
-        resume.addContact("GitHub", "https://github.com/gkislin");
-        resume.addContact("Stackoverflow", "https://stackoverflow.com/users/548473");
-        resume.addContact("Домашняя страница", "http://gkislin.ru/");
+        resume.addContact(ContactType.PHONE, "+7(921) 855-0482");
+        resume.addContact(ContactType.SKYPE, "skype:grigory.kislin");
+        resume.addContact(ContactType.EMAIL, "gkislin@yandex.ru");
+        resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin");
+        resume.addContact(ContactType.GITHUB, "https://github.com/gkislin");
+        resume.addContact(ContactType.STAKOVERFLOW, "https://stackoverflow.com/users/548473");
+        resume.addContact(ContactType.HOMEPAGE, "http://gkislin.ru/");
 
-        Section objective = new StringSection("Позиция",
+        Section objective = new StringSection(SectionType.OBJECTIVE,
                 "Ведущий стажировок и корпоративного обучения по " +
                         "Java Web и Enterprise технологиям");
-        Section personal = new StringSection("Личные качества",
+        Section personal = new StringSection(SectionType.PERSONAL,
                 "Аналитический склад ума, сильная логика, креативность, инициативность. " +
                         "Пурист кода и архитектуры.");
 
@@ -44,7 +43,7 @@ public class TestResume {
                             "администрирования и мониторинга системы по JMX (Jython/ Django).");
         achievementList.add("Реализация протоколов по приему платежей всех основных платежных системы России " +
                             "(Cyberplat, Eport, Chronopay,\nСбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.");
-        Section achievement = new ListStringSection("Достижения", achievementList);
+        Section achievement = new ListStringSection(SectionType.ACHIEVEMENT, achievementList);
 
         List<String> qualificationList = new ArrayList<>();
         qualificationList.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
@@ -71,9 +70,9 @@ public class TestResume {
         qualificationList.add("программирования");
         qualificationList.add("Родной русский, английский \"upper intermediate\"");
 
-        Section qualification = new ListStringSection("Квалификация", qualificationList);
+        Section qualification = new ListStringSection(SectionType.QUALIFICATIONS, qualificationList);
 
-        TimeIntervalSection experience = new TimeIntervalSection("Опыт работы");
+        InnerClassSection experience = new InnerClassSection(SectionType.EXPERIENCE);
         experience.addInstitution("Java Online Projects", "http://javaops.ru/",
                             "10/2013", "Сейчас",
                             "Автор проекта.\n" +
@@ -125,7 +124,7 @@ public class TestResume {
                                     "внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).");
 
 
-        TimeIntervalSection education = new TimeIntervalSection("Образование");
+        InnerClassSection education = new InnerClassSection(SectionType.EDUCATION);
         education.addInstitution("Coursera", "https://www.coursera.org/course/progfun",
                             "03/2013", "05/2013",
                             "\"Functional Programming Principles in Scala\" by Martin Odersky");
@@ -140,12 +139,14 @@ public class TestResume {
                             "03/1998",
                             "6 месяцев обучения цифровым телефонным сетям (Москва)");
 
+
         String institutionName = "Санкт-Петербургский национальный исследовательский университет " +
                                 "информационных технологий, механики и оптики";
         education.addInstitution(institutionName, "http://www.ifmo.ru/",
                             "09/1993", "07/1996", "Аспирантура (программист С, С++)");
         education.addPeriodOfActivity(institutionName, "09/1987",
                             "07/1993", "Инженер (программист Fortran, C)");
+
 
         education.addInstitution("Заочная физико-техническая школа при МФТИ",
                             "http://www.school.mipt.ru/", "09/1984", "06/1987",
@@ -158,11 +159,12 @@ public class TestResume {
         resume.addSection(SectionType.EXPERIENCE, experience);
         resume.addSection(SectionType.EDUCATION, education);
 
+
         System.out.println(resume.getFullName());
         System.out.println();
 
-        for (Map.Entry<String, String> entry : resume.getContacts().entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+        for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()) {
+            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
         }
         System.out.println();
         System.out.println();

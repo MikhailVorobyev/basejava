@@ -2,11 +2,11 @@ package ru.javawebinar.basejava.model;
 
 import java.util.*;
 
-public class TimeIntervalSection implements Section {
-    private String title;
+public class InnerClassSection implements Section {
+    private SectionType title;
     private Map<String, Institution> institutions = new LinkedHashMap<>();
 
-    public TimeIntervalSection(String title) {
+    public InnerClassSection(SectionType title) {
         Objects.requireNonNull(title, "title must be not null");
         this.title = title;
     }
@@ -17,6 +17,7 @@ public class TimeIntervalSection implements Section {
     }
 
     public void addPeriodOfActivity(String institutionName, String dateStart, String dateFinish, String description) {
+        Objects.requireNonNull(institutionName, "institutionName must be not null");
         Institution institution = institutions.get(institutionName);
         institution.addPeriod(dateStart, dateFinish, description);
         institutions.put(institution.getInstitutionName(), institution);
@@ -24,7 +25,8 @@ public class TimeIntervalSection implements Section {
 
     @Override
     public String toString() {
-        return title + '\n' + convertToString(institutions);
+        String result = title.getTitle() + '\n' + convertToString(institutions);
+        return result.substring(0, result.length() - 1);
     }
 
     private String convertToString(Map<String, Institution> map) {
@@ -40,9 +42,6 @@ public class TimeIntervalSection implements Section {
     private class Institution {
         private String institutionName;
         private String link;
-        private String dateStart;
-        private String dateFinish;
-        private String description;
         private List<String> period = new ArrayList<>();
 
         private Institution(String institutionName, String link, String dateStart,
@@ -54,9 +53,6 @@ public class TimeIntervalSection implements Section {
             Objects.requireNonNull(description, "description must be not null");
             this.institutionName = institutionName;
             this.link = link;
-            this.dateStart = dateStart;
-            this.dateFinish = dateFinish;
-            this.description = description;
             addPeriod(dateStart, dateFinish, description);
         }
 
