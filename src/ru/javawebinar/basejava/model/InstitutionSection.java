@@ -2,11 +2,11 @@ package ru.javawebinar.basejava.model;
 
 import java.util.*;
 
-public class InnerClassSection implements Section {
-    private SectionType title;
+public class InstitutionSection implements Section {
+    private String title;
     private Map<String, Institution> institutions = new LinkedHashMap<>();
 
-    public InnerClassSection(SectionType title) {
+    public InstitutionSection(String title) {
         Objects.requireNonNull(title, "title must be not null");
         this.title = title;
     }
@@ -25,7 +25,7 @@ public class InnerClassSection implements Section {
 
     @Override
     public String toString() {
-        String result = title.getTitle() + '\n' + convertToString(institutions);
+        String result = title + '\n' + convertToString(institutions);
         return result.substring(0, result.length() - 1);
     }
 

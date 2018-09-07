@@ -17,10 +17,10 @@ public class TestResume {
         resume.addContact(ContactType.STAKOVERFLOW, "https://stackoverflow.com/users/548473");
         resume.addContact(ContactType.HOMEPAGE, "http://gkislin.ru/");
 
-        Section objective = new StringSection(SectionType.OBJECTIVE,
+        Section objective = new StringSection(SectionType.OBJECTIVE.getTitle(),
                 "Ведущий стажировок и корпоративного обучения по " +
                         "Java Web и Enterprise технологиям");
-        Section personal = new StringSection(SectionType.PERSONAL,
+        Section personal = new StringSection(SectionType.PERSONAL.getTitle(),
                 "Аналитический склад ума, сильная логика, креативность, инициативность. " +
                         "Пурист кода и архитектуры.");
 
@@ -43,7 +43,7 @@ public class TestResume {
                             "администрирования и мониторинга системы по JMX (Jython/ Django).");
         achievementList.add("Реализация протоколов по приему платежей всех основных платежных системы России " +
                             "(Cyberplat, Eport, Chronopay,\nСбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.");
-        Section achievement = new ListStringSection(SectionType.ACHIEVEMENT, achievementList);
+        Section achievement = new ListStringSection(SectionType.ACHIEVEMENT.getTitle(), achievementList);
 
         List<String> qualificationList = new ArrayList<>();
         qualificationList.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
@@ -70,9 +70,9 @@ public class TestResume {
         qualificationList.add("программирования");
         qualificationList.add("Родной русский, английский \"upper intermediate\"");
 
-        Section qualification = new ListStringSection(SectionType.QUALIFICATIONS, qualificationList);
+        Section qualification = new ListStringSection(SectionType.QUALIFICATIONS.getTitle(), qualificationList);
 
-        InnerClassSection experience = new InnerClassSection(SectionType.EXPERIENCE);
+        InstitutionSection experience = new InstitutionSection(SectionType.EXPERIENCE.getTitle());
         experience.addInstitution("Java Online Projects", "http://javaops.ru/",
                             "10/2013", "Сейчас",
                             "Автор проекта.\n" +
@@ -124,7 +124,7 @@ public class TestResume {
                                     "внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).");
 
 
-        InnerClassSection education = new InnerClassSection(SectionType.EDUCATION);
+        InstitutionSection education = new InstitutionSection(SectionType.EDUCATION.getTitle());
         education.addInstitution("Coursera", "https://www.coursera.org/course/progfun",
                             "03/2013", "05/2013",
                             "\"Functional Programming Principles in Scala\" by Martin Odersky");
