@@ -17,12 +17,11 @@ public class TestResume {
         resume.addContact(ContactType.STAKOVERFLOW, "https://stackoverflow.com/users/548473");
         resume.addContact(ContactType.HOMEPAGE, "http://gkislin.ru/");
 
-        Section objective = new StringSection(SectionType.OBJECTIVE.getTitle(),
-                "Ведущий стажировок и корпоративного обучения по " +
-                        "Java Web и Enterprise технологиям");
-        Section personal = new StringSection(SectionType.PERSONAL.getTitle(),
-                "Аналитический склад ума, сильная логика, креативность, инициативность. " +
-                        "Пурист кода и архитектуры.");
+        Section objective = new StringSection("Ведущий стажировок и корпоративного обучения по " +
+                                            "Java Web и Enterprise технологиям");
+        Section personal = new StringSection("Аналитический склад ума, сильная логика, " +
+                                            "креативность, инициативность. " +
+                                            "Пурист кода и архитектуры.");
 
         List<String> achievementList = new ArrayList<>();
         achievementList.add("С 2013 года: разработка проектов \"Разработка Web приложения\"," +
@@ -43,7 +42,7 @@ public class TestResume {
                             "администрирования и мониторинга системы по JMX (Jython/ Django).");
         achievementList.add("Реализация протоколов по приему платежей всех основных платежных системы России " +
                             "(Cyberplat, Eport, Chronopay,\nСбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.");
-        Section achievement = new ListStringSection(SectionType.ACHIEVEMENT.getTitle(), achievementList);
+        Section achievement = new ListStringSection(achievementList);
 
         List<String> qualificationList = new ArrayList<>();
         qualificationList.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
@@ -70,13 +69,12 @@ public class TestResume {
         qualificationList.add("программирования");
         qualificationList.add("Родной русский, английский \"upper intermediate\"");
 
-        Section qualification = new ListStringSection(SectionType.QUALIFICATIONS.getTitle(), qualificationList);
+        Section qualification = new ListStringSection(qualificationList);
 
-        InstitutionSection experience = new InstitutionSection(SectionType.EXPERIENCE.getTitle());
-        experience.addInstitution("Java Online Projects", "http://javaops.ru/",
-                            "10/2013", "Сейчас",
+        InstitutionSection experience = new InstitutionSection("Java Online Projects",
+                            "http://javaops.ru/", "10/2013", "Сейчас",
                             "Автор проекта.\n" +
-                                    "Создание, организация и проведение Java онлайн проектов и стажировок.");
+                                      "Создание, организация и проведение Java онлайн проектов и стажировок.");
         experience.addInstitution("Wrike", "https://www.wrike.com/",
                             "10/2014", "01/2016",
                             "Старший разработчик (backend)\n" +
@@ -124,8 +122,8 @@ public class TestResume {
                                     "внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).");
 
 
-        InstitutionSection education = new InstitutionSection(SectionType.EDUCATION.getTitle());
-        education.addInstitution("Coursera", "https://www.coursera.org/course/progfun",
+        InstitutionSection education = new InstitutionSection("Coursera",
+                            "https://www.coursera.org/course/progfun",
                             "03/2013", "05/2013",
                             "\"Functional Programming Principles in Scala\" by Martin Odersky");
         education.addInstitution("Luxoft",
@@ -170,8 +168,8 @@ public class TestResume {
         System.out.println();
 
         for (Map.Entry<SectionType, Section> entry : resume.getSections().entrySet()) {
-            Section section = entry.getValue();
-            System.out.println(section);
+            System.out.println(entry.getKey().getTitle());
+            System.out.println(entry.getValue());
             System.out.println();
         }
     }

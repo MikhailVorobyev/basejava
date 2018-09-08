@@ -3,29 +3,41 @@ package ru.javawebinar.basejava.model;
 import java.util.*;
 
 public class InstitutionSection implements Section {
-    private String title;
     private Map<String, Institution> institutions = new LinkedHashMap<>();
 
-    public InstitutionSection(String title) {
-        Objects.requireNonNull(title, "title must be not null");
-        this.title = title;
+    public InstitutionSection(String institutionName, String link, String dateStart,
+                              String dateFinish, String description) {
+        addInstitution(institutionName, link, dateStart, dateFinish, description);
     }
 
     public void addInstitution(String institutionName, String link, String dateStart,
                                String dateFinish, String description) {
-        institutions.put(institutionName, new Institution(institutionName, link, dateStart, dateFinish, description));
+        Objects.requireNonNull(institutionName, "institutionName must be not null");
+        Objects.requireNonNull(link, "link must be not null");
+        Objects.requireNonNull(dateStart, "dateStart must be not null");
+        Objects.requireNonNull(dateFinish, "dateFinish must be not null");
+        Objects.requireNonNull(description, "description must be not null");
+        Institution institution = new Institution(institutionName, link);
+        institution.addPeriod(dateStart, dateFinish, description);
+        institutions.put(institutionName, institution);
     }
 
     public void addPeriodOfActivity(String institutionName, String dateStart, String dateFinish, String description) {
-        Objects.requireNonNull(institutionName, "institutionName must be not null");
+        Objects.requireNonNull(dateStart, "dateStart must be not null");
+        Objects.requireNonNull(dateFinish, "dateFinish must be not null");
+        Objects.requireNonNull(description, "description must be not null");
         Institution institution = institutions.get(institutionName);
-        institution.addPeriod(dateStart, dateFinish, description);
-        institutions.put(institution.getInstitutionName(), institution);
+        if (institution != null) {
+            institution.addPeriod(dateStart, dateFinish, description);
+            institutions.put(institutionName, institution);
+        } else {
+            System.out.println("Institution " + institutionName + " doesn't exist.");
+        }
     }
 
     @Override
     public String toString() {
-        String result = title + '\n' + convertToString(institutions);
+        String result = convertToString(institutions);
         return result.substring(0, result.length() - 1);
     }
 
@@ -44,16 +56,9 @@ public class InstitutionSection implements Section {
         private String link;
         private List<String> period = new ArrayList<>();
 
-        private Institution(String institutionName, String link, String dateStart,
-                            String dateFinish, String description) {
-            Objects.requireNonNull(institutionName, "institutionName must be not null");
-            Objects.requireNonNull(link, "link must be not null");
-            Objects.requireNonNull(dateStart, "dateStart must be not null");
-            Objects.requireNonNull(dateFinish, "dateFinish must be not null");
-            Objects.requireNonNull(description, "description must be not null");
+        private Institution(String institutionName, String link) {
             this.institutionName = institutionName;
             this.link = link;
-            addPeriod(dateStart, dateFinish, description);
         }
 
         public String getInstitutionName() {

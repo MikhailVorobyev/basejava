@@ -4,19 +4,16 @@ import java.util.List;
 import java.util.Objects;
 
 public class ListStringSection implements Section {
-    private String title;
     private List<String> description;
 
-    public ListStringSection(String title, List<String> description) {
-        Objects.requireNonNull(title, "title must not be null");
+    public ListStringSection(List<String> description) {
         Objects.requireNonNull(description, "description must not be null");
-        this.title = title;
         this.description = description;
     }
 
     @Override
     public String toString() {
-        return title + '\n' + convertToString(description);
+        return convertToString(description);
     }
 
     private String convertToString(List<String> arrayString) {
