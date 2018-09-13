@@ -21,32 +21,32 @@ public class MapSearchKeyUuidStorage extends AbstractStorage<String> {
     }
     
     @Override
-    protected void saveElement(Resume resume, String uuidKey) {
+    protected void doSave(Resume resume, String uuidKey) {
         storage.put(uuidKey, resume);
     }
 
     @Override
-    protected void deleteElement(String uuidKey) {
+    protected void doDelete(String uuidKey) {
         storage.remove(uuidKey);
     }
 
     @Override
-    protected void updateElement(Resume resume, String uuidKey) {
+    protected void doUpdate(Resume resume, String uuidKey) {
         storage.put(uuidKey, resume);
     }
 
     @Override
-    protected Resume getElement(String uuidKey) {
+    protected Resume doGet(String uuidKey) {
         return storage.get(uuidKey);
     }
 
     @Override
-    public List<Resume> getCopyResumeList() {
+    public List<Resume> doCopyAll() {
         return new ArrayList<>(storage.values());
     }
     
     @Override
-    protected boolean containsElement(String uuidKey) {
+    protected boolean isExist(String uuidKey) {
         return storage.containsKey(uuidKey);
     }
 

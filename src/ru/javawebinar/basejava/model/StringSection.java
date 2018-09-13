@@ -2,17 +2,32 @@ package ru.javawebinar.basejava.model;
 
 import java.util.Objects;
 
-public class StringSection implements Section {
+public class StringSection extends Section {
 
-    private String description;
+    private final String content;
 
-    public StringSection(String description) {
-        Objects.requireNonNull(description, "description must not be null");
-        this.description = description;
+    public StringSection(String content) {
+        Objects.requireNonNull(content, "content must not be null");
+        this.content = content;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StringSection that = (StringSection) o;
+
+        return content.equals(that.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return content.hashCode();
     }
 
     @Override
     public String toString() {
-        return description + '\n';
+        return content + '\n';
     }
 }

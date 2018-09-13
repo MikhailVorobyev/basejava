@@ -19,32 +19,32 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected void saveElement(Resume resume, Integer index) {
+    protected void doSave(Resume resume, Integer index) {
         storage.add(resume);
     }
 
     @Override
-    protected void deleteElement(Integer index) {
+    protected void doDelete(Integer index) {
         storage.remove(index.intValue());
     }
 
     @Override
-    protected void updateElement(Resume resume, Integer index) {
+    protected void doUpdate(Resume resume, Integer index) {
         storage.set(index, resume);
     }
 
     @Override
-    protected Resume getElement(Integer index) {
+    protected Resume doGet(Integer index) {
         return storage.get(index);
     }
 
     @Override
-    public List<Resume> getCopyResumeList() {
+    public List<Resume> doCopyAll() {
         return new ArrayList<>(storage);
     }
 
     @Override
-    protected boolean containsElement(Integer elementKey) {
+    protected boolean isExist(Integer elementKey) {
         return elementKey != null;
     }
 
