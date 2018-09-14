@@ -12,11 +12,6 @@ public class ListStringSection extends Section {
     }
 
     @Override
-    public String toString() {
-        return items.toString();
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -31,14 +26,8 @@ public class ListStringSection extends Section {
         return items.hashCode();
     }
 
-    /*private String convertToString(List<String> arrayString) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String string : arrayString) {
-            stringBuilder.append(string);
-            stringBuilder.append('\n');
-            stringBuilder.append('\n');
-        }
-        stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
-        return stringBuilder.toString();
-    }*/
+    @Override
+    public String toString() {
+        return items.toString();
+    }
 }

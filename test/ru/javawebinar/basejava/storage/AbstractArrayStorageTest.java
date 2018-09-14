@@ -24,7 +24,7 @@ public class AbstractArrayStorageTest extends AbstractStorageTest {
 
     private void fillingStorage() throws StorageException {
         for (int i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-            storage.save(new Resume("fullName" + i));
+            storage.save(new Resume("Name" + i));
         }
     }
 }

@@ -1,17 +1,18 @@
-package ru.javawebinar.basejava;
+package ru.javawebinar.basejava.model;
 
-import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.util.DateUtil;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class TestResume {
-    public static void main(String[] args) {
-        Resume resume = new Resume("Григорий Кислин");
+public class ResumeTestData {
+    private final Resume resume;
+
+    public ResumeTestData(String uuid, String fullName) {
+        this.resume = new Resume(uuid, fullName);
+
         //Contacts
         resume.addContact(ContactType.PHONE, "+7(921) 855-0482");
         resume.addContact(ContactType.SKYPE, "skype:grigory.kislin");
@@ -221,20 +222,9 @@ public class TestResume {
         resume.addSection(SectionType.QUALIFICATIONS, qualification);
         resume.addSection(SectionType.EXPERIENCE, experience);
         resume.addSection(SectionType.EDUCATION, education);
+    }
 
-        System.out.println(resume.getFullName());
-        System.out.println();
-
-        for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()) {
-            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
-        }
-        System.out.println();
-        System.out.println();
-
-        for (Map.Entry<SectionType, Section> entry : resume.getSections().entrySet()) {
-            System.out.println(entry.getKey().getTitle());
-            System.out.println(entry.getValue());
-            System.out.println();
-        }
+    public Resume getResume() {
+        return resume;
     }
 }

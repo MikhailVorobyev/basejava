@@ -5,10 +5,11 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class AbstractFileStorage extends AbstractStorage<File> {
+public abstract class AbstractFileStorage extends AbstractStorage<File> {
     private File directory;
     protected AbstractFileStorage(File directory) {
         Objects.requireNonNull(directory, "directory must not be null");
@@ -21,17 +22,20 @@ public class AbstractFileStorage extends AbstractStorage<File> {
         this.directory = directory;
     }
 
-    private void doWrite(Resume resume, File file) throws IOException {
-    }
+    protected abstract Resume doRead(File file);
+
+    protected abstract void doWrite(Resume resume, File file) throws IOException;
 
     @Override
     public void clear() {
-
+        for (File file : directory.listFiles()) {
+            file.delete();
+        }
     }
 
     @Override
     public int size() {
-        return 0;
+        return directory.listFiles().length;
     }
 
     @Override
@@ -55,23 +59,31 @@ public class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void doDelete(File searchKey) {
-
+    protected void doDelete(File file) {
+        file.delete();
     }
 
     @Override
-    protected void doUpdate(Resume resume, File searchKey) {
-
+    protected void doUpdate(Resume resume, File file) {
+        try {
+            doWrite(resume, file);
+        } catch (IOException e) {
+            throw new StorageException("IO error", file.getName(), e);
+        }
     }
 
     @Override
-    protected Resume doGet(File searchKey) {
-        return null;
+    protected Resume doGet(File file) {
+        return doRead(file);
     }
 
     @Override
     protected List<Resume> doCopyAll() {
-        return null;
+        List<Resume> list = new ArrayList<>();
+        for (File file : directory.listFiles()) {
+            list.add(doRead(file));
+        }
+        return list;
     }
 
 
