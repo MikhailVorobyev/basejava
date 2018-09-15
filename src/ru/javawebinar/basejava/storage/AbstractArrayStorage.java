@@ -11,6 +11,10 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size;
 
+    protected abstract void insertElement(Resume resume, int index);
+
+    protected abstract void replaceElement(int index);
+
     @Override
     public int size() {
         return size;
@@ -58,9 +62,4 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected boolean isExist(Integer index) {
         return index >= 0;
     }
-
-    protected abstract void insertElement(Resume resume, int index);
-
-    protected abstract void replaceElement(int index);
-
 }

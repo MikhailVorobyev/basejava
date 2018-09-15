@@ -2,7 +2,7 @@ package ru.javawebinar.basejava.model;
 
 import java.util.*;
 
-public class InstitutionSection extends Section {
+public class InstitutionSection implements Section {
     private final List<Institution> institutions;
 
     public InstitutionSection(List<Institution> institutions) {

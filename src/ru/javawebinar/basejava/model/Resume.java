@@ -37,24 +37,16 @@ public class Resume implements Comparable<Resume> {
         return new EnumMap<>(contacts);
     }
 
+    public void addContact(ContactType contactType, String contact) {
+        contacts.put(contactType, contact);
+    }
+
     public Map<SectionType, Section> getSections() {
         return new EnumMap<>(sections);
     }
 
     public void addSection(SectionType sectionType, Section section) {
         sections.put(sectionType, section);
-    }
-
-    public void addContact(ContactType contactType, String contact) {
-        contacts.put(contactType, contact);
-    }
-
-    public String getContact(ContactType type) {
-        return contacts.get(type);
-    }
-
-    public Section getSection(SectionType type) {
-        return sections.get(type);
     }
 
     @Override

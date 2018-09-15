@@ -2,7 +2,7 @@ package ru.javawebinar.basejava.model;
 
 import java.util.Objects;
 
-public class StringSection extends Section {
+public class StringSection implements Section {
 
     private final String content;
 
