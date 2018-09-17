@@ -1,9 +1,7 @@
 package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.*;
-import ru.javawebinar.basejava.util.DateUtil;
 
-import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,117 +92,95 @@ public class ResumeTestData {
 
 
         //Experience
-        List<Institution> expInstitutions = new ArrayList<>();
-        expInstitutions.add(new Institution("Java Online Projects", "http://javaops.ru/",
-                             DateUtil.of(2013, Month.OCTOBER), LocalDate.now(),
-                        "Автор проекта.", "Создание, организация и проведение " +
-                            "Java онлайн проектов и стажировок."));
-
-
-        expInstitutions.add(new Institution("Wrike", "https://www.wrike.com/",
-                             DateUtil.of(2014, Month.OCTOBER), DateUtil.of(2016, Month.JANUARY),
-                        "Старший разработчик (backend).",
-                   "Проектирование и разработка онлайн платформы управления проектами Wrike " +
-                             "(Java 8 API, Maven, Spring,\nMyBatis, Guava, Vaadin, PostgreSQL, Redis). " +
-                             "Двухфакторная аутентификация, авторизация по OAuth1, OAuth2,\nJWT SSO."));
-
-
-        expInstitutions.add(new Institution("RIT Center", null,
-                             DateUtil.of(2012, Month.APRIL), DateUtil.of(2014, Month.OCTOBER),
-                        "Java архитектор.",
-                   "Организация процесса разработки системы ERP для разных " +
-                             "окружений: релизная политика, версионирование,\nведение CI (Jenkins), " +
-                             "миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx),\n" +
-                             "AAA via SSO. Архитектура БД и серверной части системы. " +
-                             "Разработка интергационных сервисов: CMIS,\nBPMN2, 1C (WebServices), " +
-                             "сервисов общего назначения (почта, экспорт в pdf, doc, html). " +
-                             "Интеграция Alfresco\nJLAN для online редактирование из браузера документов " +
-                             "MS Office. Maven + plugin development, Ant, Apache\nCommons, " +
-                             "Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, " +
-                             "Python scripting, Unix shell\nremote scripting via ssh tunnels, PL/Python"));
-
-
-        expInstitutions.add(new Institution("Luxoft (Deutsche Bank)", "http://www.luxoft.ru/",
-                             DateUtil.of(2010, Month.DECEMBER), DateUtil.of(2012, Month.APRIL),
-                        "Ведущий программист.",
-                   "Участие в проекте Deutsche Bank CRM " +
-                             "(WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper,\nOracle)." +
-                             " Реализация клиентской и серверной части CRM. " +
-                             "Реализация RIA-приложения для\nадминистрирования, мониторинга и " +
-                             "анализа результатов в области алгоритмического трейдинга. JPA, Spring,\n" +
-                             "Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5."));
-
-
-        expInstitutions.add(new Institution("Yota", "https://www.yota.ru/",
-                             DateUtil.of(2008, Month.JUNE), DateUtil.of(2010, Month.DECEMBER),
-                        "Ведущий специалист.",
-                   "Дизайн и имплементация Java EE фреймворка для отдела " +
-                             "\"Платежные Системы\" (GlassFish v2.1, v3, OC4J,\nEJB3, JAX-WS RI 2.1, " +
-                             "Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики " +
-                             "и\nмониторинга фреймворка. Разработка online JMX клиента " +
-                             "(Python/ Jython, Django, ExtJS)"));
-
-
-        expInstitutions.add(new Institution("Enkata", "http://enkata.com/",
-                             DateUtil.of(2007, Month.MARCH), DateUtil.of(2008, Month.JUNE),
-                        "Разработчик ПО.", "Реализация клиентской (Eclipse RCP) и серверной " +
-                             "(JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного\nJ2EE приложения " +
-                             "(OLAP, Data mining)."));
-
-
-        expInstitutions.add(new Institution("Siemens AG", "https://www.siemens.com/ru/ru/home.html",
-                             DateUtil.of(2005, Month.JANUARY), DateUtil.of(2007, Month.FEBRUARY),
-                        "Разработчик ПО.",
-                   "Разработка информационной модели, проектирование интерфейсов, " +
-                             "реализация и отладка ПО на мобильной\nIN платформе Siemens @vantage (Java, Unix)."));
-
-
-        expInstitutions.add(new Institution("Alcatel", "http://www.alcatel.ru/",
-                             DateUtil.of(1997, Month.SEPTEMBER), DateUtil.of(2005, Month.JANUARY),
-                        "Инженер по аппаратному и программному тестированию.",
-                   "Тестирование, отладка, " +
-                             "внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM)."));
-        Section experience = new InstitutionSection(expInstitutions);
+        Section experience = new InstitutionSection(
+                new Institution("Java Online Projects", "http://javaops.ru/",
+                        new Institution.Position(2013, Month.OCTOBER, "Автор проекта.",
+                                "Создание, организация и проведение " +
+                                        "Java онлайн проектов и стажировок.")),
+                new Institution("Wrike", "https://www.wrike.com/",
+                        new Institution.Position(2014, Month.OCTOBER, 2016, Month.JANUARY,
+                                "Старший разработчик (backend).",
+                                "Проектирование и разработка онлайн платформы управления проектами Wrike " +
+                                        "(Java 8 API, Maven, Spring,\nMyBatis, Guava, Vaadin, PostgreSQL, Redis). " +
+                                        "Двухфакторная аутентификация, авторизация по OAuth1, OAuth2,\nJWT SSO.")),
+                new Institution("RIT Center", null,
+                        new Institution.Position(2012, Month.APRIL, 2014, Month.OCTOBER,
+                                "Java архитектор.",
+                                "Организация процесса разработки системы ERP для разных " +
+                                        "окружений: релизная политика, версионирование,\nведение CI (Jenkins), " +
+                                        "миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx),\n" +
+                                        "AAA via SSO. Архитектура БД и серверной части системы. " +
+                                        "Разработка интергационных сервисов: CMIS,\nBPMN2, 1C (WebServices), " +
+                                        "сервисов общего назначения (почта, экспорт в pdf, doc, html). " +
+                                        "Интеграция Alfresco\nJLAN для online редактирование из браузера документов " +
+                                        "MS Office. Maven + plugin development, Ant, Apache\nCommons, " +
+                                        "Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, " +
+                                        "Python scripting, Unix shell\nremote scripting via ssh tunnels, PL/Python")),
+                new Institution("Luxoft (Deutsche Bank)", "http://www.luxoft.ru/",
+                        new Institution.Position(2010, Month.DECEMBER, 2012, Month.APRIL,
+                                "Ведущий программист.",
+                                "Участие в проекте Deutsche Bank CRM " +
+                                        "(WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper,\nOracle)." +
+                                        " Реализация клиентской и серверной части CRM. " +
+                                        "Реализация RIA-приложения для\nадминистрирования, мониторинга и " +
+                                        "анализа результатов в области алгоритмического трейдинга. JPA, Spring,\n" +
+                                        "Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.")),
+                new Institution("Yota", "https://www.yota.ru/",
+                        new Institution.Position(2008, Month.JUNE, 2010, Month.DECEMBER,
+                                "Ведущий специалист.",
+                                "Дизайн и имплементация Java EE фреймворка для отдела " +
+                                        "\"Платежные Системы\" (GlassFish v2.1, v3, OC4J,\nEJB3, JAX-WS RI 2.1, " +
+                                        "Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики " +
+                                        "и\nмониторинга фреймворка. Разработка online JMX клиента " +
+                                        "(Python/ Jython, Django, ExtJS)")),
+                new Institution("Enkata", "http://enkata.com/",
+                        new Institution.Position(2007, Month.MARCH, 2008, Month.JUNE,
+                                "Разработчик ПО.",
+                                "Реализация клиентской (Eclipse RCP) и серверной " +
+                                        "(JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного\nJ2EE приложения " +
+                                        "(OLAP, Data mining).")),
+                new Institution("Siemens AG", "https://www.siemens.com/ru/ru/home.html",
+                        new Institution.Position(2005, Month.JANUARY, 2007, Month.FEBRUARY,
+                                "Разработчик ПО.",
+                                "Разработка информационной модели, проектирование интерфейсов, " +
+                                        "реализация и отладка ПО на мобильной\n" +
+                                        "IN платформе Siemens @vantage (Java, Unix).")),
+                new Institution("Alcatel", "http://www.alcatel.ru/",
+                        new Institution.Position(1997, Month.SEPTEMBER, 2005, Month.JANUARY,
+                                "Инженер по аппаратному и программному тестированию.",
+                                "Тестирование, отладка, " +
+                                        "внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).")));
 
 
         //Education
-        List<Institution> educInstitutions = new ArrayList<>();
-        educInstitutions.add(new Institution("Coursera", "https://www.coursera.org/course/progfun",
-                             DateUtil.of(2013, Month.MARCH), DateUtil.of(2013, Month.MAY),
-                        "\"Functional Programming Principles in Scala\" by Martin Odersky",
-                    null));
+        Section education = new InstitutionSection(
+                new Institution("Coursera", "https://www.coursera.org/course/progfun",
+                        new Institution.Position(2013, Month.MARCH, 2013, Month.MAY,
+                                "\"Functional Programming Principles in Scala\" by Martin Odersky",
+                                null)),
+                new Institution("Luxoft",
+                        "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366",
+                        new Institution.Position(2011, Month.MARCH, 2011, Month.APRIL,
+                                "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"",
+                                null)),
+                new Institution("Siemens AG", "http://www.siemens.ru/",
+                        new Institution.Position(2005, Month.JANUARY, 2005, Month.APRIL,
+                                "3 месяца обучения мобильным IN сетям (Берлин)", null)),
+                new Institution("Alcatel", "http://www.alcatel.ru/",
+                        new Institution.Position(1997, Month.SEPTEMBER, 1998, Month.MARCH,
+                                "6 месяцев обучения цифровым телефонным сетям (Москва)", null)),
+                new Institution("Санкт-Петербургский национальный исследовательский университет " +
+                        "информационных технологий, механики и оптики",
+                        "http://www.ifmo.ru/",
+                        new Institution.Position(1993, Month.SEPTEMBER, 1996, Month.JULY,
+                                "Аспирантура (программист С, С++)", null),
+                        new Institution.Position(1987, Month.SEPTEMBER, 1993, Month.JULY,
+                                "Инженер (программист Fortran, C)", null)),
+                new Institution("Заочная физико-техническая школа при МФТИ",
+                        "http://www.school.mipt.ru/",
+                        new Institution.Position(1984, Month.SEPTEMBER, 1987, Month.JUNE,
+                                "Закончил с отличием", null)));
 
-
-        educInstitutions.add(new Institution("Luxoft",
-                         "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366",
-                             DateUtil.of(2011, Month.MARCH), DateUtil.of(2011, Month.APRIL),
-                        "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"",
-                    null));
-
-
-        educInstitutions.add(new Institution("Siemens AG", "http://www.siemens.ru/",
-                             DateUtil.of(2005, Month.JANUARY), DateUtil.of(2005, Month.APRIL),
-                        "3 месяца обучения мобильным IN сетям (Берлин)", null));
-
-
-        educInstitutions.add(new Institution("Alcatel", "http://www.alcatel.ru/",
-                             DateUtil.of(1997, Month.SEPTEMBER), DateUtil.of(1998, Month.MARCH),
-                        "6 месяцев обучения цифровым телефонным сетям (Москва)", null));
-
-
-        Institution ifmo = new Institution("Санкт-Петербургский национальный исследовательский университет " +
-                             "информационных технологий, механики и оптики",
-                         "http://www.ifmo.ru/", DateUtil.of(1993, Month.SEPTEMBER),
-                             DateUtil.of(1996, Month.JULY),
-                        "Аспирантура (программист С, С++)", null);
-        ifmo.addPeriod(DateUtil.of(1987, Month.SEPTEMBER), DateUtil.of(1993, Month.JULY),
-                        "Инженер (программист Fortran, C)", null);
-
-
-        educInstitutions.add(new Institution("Заочная физико-техническая школа при МФТИ",
-                         "http://www.school.mipt.ru/", DateUtil.of(1984, Month.SEPTEMBER), DateUtil.of(1987, Month.JUNE),
-                        "Закончил с отличием", null));
-        Section education = new InstitutionSection(educInstitutions);
 
         resume.addSection(SectionType.OBJECTIVE, objective);
         resume.addSection(SectionType.PERSONAL, personal);

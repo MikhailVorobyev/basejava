@@ -5,6 +5,10 @@ import java.util.*;
 public class InstitutionSection implements Section {
     private final List<Institution> institutions;
 
+    public InstitutionSection(Institution... institutions) {
+        this(Arrays.asList(institutions));
+    }
+
     public InstitutionSection(List<Institution> institutions) {
         Objects.requireNonNull(institutions, "institutions must be not null");
         this.institutions = institutions;
@@ -31,8 +35,6 @@ public class InstitutionSection implements Section {
 
     @Override
     public String toString() {
-        return "InstitutionSection{" +
-                "institutions=" + institutions +
-                '}';
+        return institutions.toString();
     }
 }

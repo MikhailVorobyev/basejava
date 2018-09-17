@@ -23,18 +23,20 @@ public class MainFile {
 
         System.out.println("-------------------------");
 
-        //HW8: recursion
-        File dir = new File(".");
-        recursion(dir);
+        //HW8: printDirectoryDeeply
+        File dir = new File("./src/ru/javawebinar/basejava");
+        printDirectoryDeeply(dir);
     }
 
-    private static void recursion(File path) {
-        File[] list = path.listFiles();
-        if (list != null) {
-            for (File name : list) {
-                System.out.println(name.getName());
-                if (name.isDirectory()) {
-                    recursion(name.getAbsoluteFile());
+    private static void printDirectoryDeeply(File dir) {
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    System.out.println("File: " + file.getName());
+                } else if (file.isDirectory()) {
+                    System.out.println("Directory: " + file.getName());
+                    printDirectoryDeeply(file);
                 }
             }
         }
