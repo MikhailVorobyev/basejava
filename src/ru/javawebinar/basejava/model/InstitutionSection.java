@@ -3,6 +3,8 @@ package ru.javawebinar.basejava.model;
 import java.util.*;
 
 public class InstitutionSection implements Section {
+    private static final long serialVersionUID = 1L;
+
     private final List<Institution> institutions;
 
     public InstitutionSection(Institution... institutions) {
