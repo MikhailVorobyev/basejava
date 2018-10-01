@@ -1,11 +1,17 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
-public class InstitutionSection implements Section {
+public class InstitutionSection extends Section implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final List<Institution> institutions;
+    private List<Institution> institutions;
+
+    public InstitutionSection() {
+    }
 
     public InstitutionSection(Institution... institutions) {
         this(Arrays.asList(institutions));

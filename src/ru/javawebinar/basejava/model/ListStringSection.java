@@ -1,13 +1,17 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class ListStringSection implements Section {
+public class ListStringSection extends Section implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final List<String> items;
+    private List<String> items;
+
+    public ListStringSection() {
+    }
 
     public ListStringSection(String... items) {
         this(Arrays.asList(items));
