@@ -35,6 +35,14 @@ public class Institution implements Serializable {
         this.positions = positions;
     }
 
+    public Link getHomePage() {
+        return homePage;
+    }
+
+    public List<Position> getPositions() {
+        return positions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -83,7 +91,7 @@ public class Institution implements Serializable {
             this(of(startYear, startMonth), of(endYear, endMonth), title, description);
         }
 
-        Position(LocalDate startDate, LocalDate endDate, String title, String description) {
+        public Position(LocalDate startDate, LocalDate endDate, String title, String description) {
             Objects.requireNonNull(startDate, "startDate must not be null");
             Objects.requireNonNull(endDate, "endDate must not be null");
             Objects.requireNonNull(title, "title must not be null");
