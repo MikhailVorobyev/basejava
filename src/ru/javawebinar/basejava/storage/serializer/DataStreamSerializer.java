@@ -8,25 +8,6 @@ import java.util.*;
 
 public class DataStreamSerializer implements StreamSerializer {
 
-    private <T> void writeForEach(Collection<T> collection, CustomConsumer<T> consumer,
-                                  DataOutputStream dos) throws IOException {
-        dos.writeInt(collection.size());
-        Objects.requireNonNull(consumer);
-        for (T t : collection) {
-            consumer.accept(t);
-        }
-    }
-
-    private <T> List<T> readForEach(CustomSupplier<T> supplier, DataInputStream dis) throws IOException {
-        Objects.requireNonNull(supplier);
-        List<T> resultList = new ArrayList<>();
-        int size = dis.readInt();
-        for (int i = 0; i < size; i++) {
-            resultList.add(supplier.get());
-        }
-        return resultList;
-    }
-
     @Override
     public void doWrite(Resume resume, OutputStream os) throws IOException {
         try (DataOutputStream dos = new DataOutputStream(os)) {
@@ -100,8 +81,6 @@ public class DataStreamSerializer implements StreamSerializer {
         }, dos);
     }
 
-
-
     @Override
     public Resume doRead(InputStream is) throws IOException {
         Resume resume;
@@ -110,22 +89,21 @@ public class DataStreamSerializer implements StreamSerializer {
             String fullName = dis.readUTF();
             resume = new Resume(uuid, fullName);
 
-            readSections(resume, ContactType.class, dis);
-            readSections(resume, SectionType.class, dis);
+            readMap(resume.getContacts(), a ->
+                    resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()), dis);
+            readMap(resume.getSections(), a -> {
+                SectionType sectionType = SectionType.valueOf(dis.readUTF());
+                resume.addSection(sectionType, readSection(sectionType, dis));
+            }, dis);
 
         }
         return resume;
     }
 
-    private void readSections(Resume resume, Class type, DataInputStream dis) throws IOException {
+    private <T> void readMap(T map, CustomConsumer<T> consumer, DataInputStream dis) throws IOException {
         int size = dis.readInt();
         for (int i = 0; i < size; i++) {
-            if (ContactType.class == type) {
-                resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            } else {
-                SectionType sectionType = SectionType.valueOf(dis.readUTF());
-                resume.addSection(sectionType, readSection(sectionType, dis));
-            }
+            consumer.accept(map);
         }
     }
 
@@ -174,5 +152,34 @@ public class DataStreamSerializer implements StreamSerializer {
             }
             return new Institution.Position(startDate, endDate, title, description);
         }, dis);
+    }
+
+    @FunctionalInterface
+    public interface CustomConsumer<T> {
+        void accept(T a) throws IOException;
+    }
+
+    private <T> void writeForEach(Collection<T> collection, CustomConsumer<T> consumer,
+                                  DataOutputStream dos) throws IOException {
+        dos.writeInt(collection.size());
+        Objects.requireNonNull(consumer);
+        for (T t : collection) {
+            consumer.accept(t);
+        }
+    }
+
+    @FunctionalInterface
+    public interface CustomSupplier<T> {
+        T get() throws IOException;
+    }
+
+    private <T> List<T> readForEach(CustomSupplier<T> supplier, DataInputStream dis) throws IOException {
+        Objects.requireNonNull(supplier);
+        List<T> resultList = new ArrayList<>();
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            resultList.add(supplier.get());
+        }
+        return resultList;
     }
 }
