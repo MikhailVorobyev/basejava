@@ -15,21 +15,21 @@ public class DataStreamSerializer implements StreamSerializer {
             dos.writeUTF(resume.getFullName());
             Map<ContactType, String> contacts = resume.getContacts();
 
-            writeForEach(contacts.entrySet(), entry -> {
+            writeForEach(dos, contacts.entrySet(), entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
-            }, dos);
+            });
 
             Map<SectionType, Section> sections = resume.getSections();
-            writeForEach(sections.entrySet(), entry -> {
+            writeForEach(dos, sections.entrySet(), entry -> {
                 SectionType sectionType = entry.getKey();
                 dos.writeUTF(sectionType.name());
-                writeSection(sectionType, entry.getValue(), dos);
-            }, dos);
+                writeSection(dos, sectionType, entry.getValue());
+            });
         }
     }
 
-    private void writeSection(SectionType sectionType, Section section, DataOutputStream dos) throws IOException {
+    private void writeSection(DataOutputStream dos, SectionType sectionType, Section section) throws IOException {
         switch (sectionType) {
             case OBJECTIVE:
             case PERSONAL:
@@ -37,48 +37,22 @@ public class DataStreamSerializer implements StreamSerializer {
                 break;
             case ACHIEVEMENT:
             case QUALIFICATIONS:
-                List<String> listString = ((ListStringSection) section).getItems();
-                writeForEach(listString, dos::writeUTF, dos);
+                writeForEach(dos, ((ListStringSection) section).getItems(), dos::writeUTF);
                 break;
             case EXPERIENCE:
             case EDUCATION:
-                writeInstitutionSection((InstitutionSection) section, dos);
+                writeForEach(dos, ((InstitutionSection) section).getInstitutions(), institution -> {
+                    dos.writeUTF(institution.getHomePage().getName());
+                    dos.writeUTF(institution.getHomePage().getUrl());
+                    writeForEach(dos, institution.getPositions(), position -> {
+                        writeLocalDate(dos, position.getStartDate());
+                        writeLocalDate(dos, position.getEndDate());
+                        dos.writeUTF(position.getTitle());
+                        dos.writeUTF(position.getDescription());
+                    });
+                });
                 break;
         }
-    }
-
-    private void writeInstitutionSection(InstitutionSection institutionSection,
-                                         DataOutputStream dos) throws IOException {
-        List<Institution> institutions = institutionSection.getInstitutions();
-        writeForEach(institutions, institution -> {
-            writeLink(institution.getHomePage(), dos);
-            writePositions(institution.getPositions(), dos);
-        }, dos);
-
-    }
-
-    private void writeLink(Link link, DataOutputStream dos) throws IOException {
-        dos.writeUTF(link.getName());
-        String url = link.getUrl();
-        if (url == null) {
-            dos.writeUTF("");
-        } else {
-            dos.writeUTF(url);
-        }
-    }
-
-    private void writePositions(List<Institution.Position> positions, DataOutputStream dos) throws IOException {
-        writeForEach(positions, position -> {
-            dos.writeUTF(position.getStartDate().toString());
-            dos.writeUTF(position.getEndDate().toString());
-            dos.writeUTF(position.getTitle());
-            String description = position.getDescription();
-            if (description == null) {
-                dos.writeUTF("");
-            } else {
-                dos.writeUTF(description);
-            }
-        }, dos);
     }
 
     @Override
@@ -89,25 +63,24 @@ public class DataStreamSerializer implements StreamSerializer {
             String fullName = dis.readUTF();
             resume = new Resume(uuid, fullName);
 
-            readMap(resume.getContacts(), a ->
-                    resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()), dis);
-            readMap(resume.getSections(), a -> {
+            readItems(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readItems(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
-                resume.addSection(sectionType, readSection(sectionType, dis));
-            }, dis);
+                resume.addSection(sectionType, readSection(dis, sectionType));
+            });
 
         }
         return resume;
     }
 
-    private <T> void readMap(T map, CustomConsumer<T> consumer, DataInputStream dis) throws IOException {
+    private void readItems(DataInputStream dis, ElementProcessor processor) throws IOException {
         int size = dis.readInt();
         for (int i = 0; i < size; i++) {
-            consumer.accept(map);
+            processor.process();
         }
     }
 
-    private Section readSection(SectionType sectionType, DataInputStream dis) throws IOException {
+    private Section readSection(DataInputStream dis, SectionType sectionType) throws IOException {
         Section section = null;
         switch (sectionType) {
             case OBJECTIVE:
@@ -116,42 +89,30 @@ public class DataStreamSerializer implements StreamSerializer {
                 break;
             case ACHIEVEMENT:
             case QUALIFICATIONS:
-                section = new ListStringSection(readForEach(dis::readUTF, dis));
+                section = new ListStringSection(readForEach(dis, dis::readUTF));
                 break;
             case EXPERIENCE:
             case EDUCATION:
-                section = readInstitutionSection(dis);
+                section = new InstitutionSection(readForEach(dis, () ->
+                        new Institution(new Link(dis.readUTF(), dis.readUTF()),
+                                readForEach(dis, () -> new Institution.Position(
+                                        readLocalDate(dis),
+                                        readLocalDate(dis),
+                                        dis.readUTF(),
+                                        dis.readUTF()
+                                )))));
                 break;
         }
         return section;
     }
 
-    private Section readInstitutionSection(DataInputStream dis) throws IOException {
-        List<Institution> institutions = readForEach(() ->
-                new Institution(readLink(dis), readPositions(dis)), dis);
-        return new InstitutionSection(institutions);
+    private LocalDate readLocalDate(DataInputStream dis) throws IOException {
+        return LocalDate.of(dis.readInt(), dis.readInt(), 1);
     }
 
-    private Link readLink(DataInputStream dis) throws IOException {
-        String name = dis.readUTF();
-        String url = dis.readUTF();
-        if ("".equals(url)) {
-            url = null;
-        }
-        return new Link(name, url);
-    }
-
-    private List<Institution.Position> readPositions(DataInputStream dis) throws IOException {
-        return readForEach(() -> {
-            LocalDate startDate = LocalDate.parse(dis.readUTF());
-            LocalDate endDate = LocalDate.parse(dis.readUTF());
-            String title = dis.readUTF();
-            String description = dis.readUTF();
-            if ("".equals(description)) {
-                description = null;
-            }
-            return new Institution.Position(startDate, endDate, title, description);
-        }, dis);
+    private void writeLocalDate(DataOutputStream dos, LocalDate ld) throws IOException {
+        dos.writeInt(ld.getYear());
+        dos.writeInt(ld.getMonth().getValue());
     }
 
     @FunctionalInterface
@@ -159,8 +120,8 @@ public class DataStreamSerializer implements StreamSerializer {
         void accept(T a) throws IOException;
     }
 
-    private <T> void writeForEach(Collection<T> collection, CustomConsumer<T> consumer,
-                                  DataOutputStream dos) throws IOException {
+    private <T> void writeForEach(DataOutputStream dos, Collection<T> collection,
+                                  CustomConsumer<T> consumer) throws IOException {
         dos.writeInt(collection.size());
         Objects.requireNonNull(consumer);
         for (T t : collection) {
@@ -173,7 +134,7 @@ public class DataStreamSerializer implements StreamSerializer {
         T get() throws IOException;
     }
 
-    private <T> List<T> readForEach(CustomSupplier<T> supplier, DataInputStream dis) throws IOException {
+    private <T> List<T> readForEach(DataInputStream dis, CustomSupplier<T> supplier) throws IOException {
         Objects.requireNonNull(supplier);
         List<T> resultList = new ArrayList<>();
         int size = dis.readInt();
@@ -181,5 +142,10 @@ public class DataStreamSerializer implements StreamSerializer {
             resultList.add(supplier.get());
         }
         return resultList;
+    }
+
+    @FunctionalInterface
+    public interface ElementProcessor {
+        void process() throws IOException;
     }
 }
