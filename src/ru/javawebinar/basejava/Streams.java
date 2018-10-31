@@ -1,7 +1,9 @@
 package ru.javawebinar.basejava;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -25,9 +27,15 @@ public class Streams {
     }
 
     private static List<Integer> oddOrEven(List<Integer> integers) {
-        boolean oddOrEven = integers.stream().mapToInt(i -> i).sum() % 2 == 0;
-        return integers.stream()
-                .filter(x -> oddOrEven == (x % 2 != 0))
-                .collect(Collectors.toList());
+        List<Integer> odd = new ArrayList<>();
+        Map<Boolean, List<Integer>> result = integers.stream()
+                .peek(integer -> {
+                    if (integer % 2 != 0) {
+                        odd.add(integer);
+                    }
+                })
+                .collect(Collectors.partitioningBy(integer -> integer % 2 == 0));
+        return odd.size() % 2 != 0 ? result.get(true) : result.get(false);
+
     }
 }
