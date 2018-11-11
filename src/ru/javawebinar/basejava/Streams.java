@@ -35,7 +35,7 @@ public class Streams {
                     }
                 })
                 .collect(Collectors.partitioningBy(integer -> integer % 2 == 0));
-        return odd.size() % 2 != 0 ? result.get(true) : result.get(false);
+        return result.get(odd.size() % 2 != 0);
 
     }
 }
