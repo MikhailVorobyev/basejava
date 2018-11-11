@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class SqlHelper {
-    private static ConnectionFactory connectionFactory;
 
     public static <T> void processingSQL(ConnectionFactory connectionFactory, String sql,
                                          SQLConsumer<PreparedStatement> consumer) {

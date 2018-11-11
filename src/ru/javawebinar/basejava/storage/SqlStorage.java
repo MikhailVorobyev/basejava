@@ -90,12 +90,11 @@ public class SqlStorage implements Storage {
     @Override
     public int size() {
         List<Integer> size = new ArrayList<>(1);
-        ResultSet rs = null;
         SqlHelper.processingSQL(connectionFactory, "SELECT COUNT(*) AS COUNT FROM resume",
                 ps -> {
-                    ResultSet rs1 = ps.executeQuery();
-                    if (rs1.next()) {
-                        size.add(rs1.getInt("COUNT"));
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        size.add(rs.getInt("COUNT"));
                     }
                 });
         return size.get(0);
