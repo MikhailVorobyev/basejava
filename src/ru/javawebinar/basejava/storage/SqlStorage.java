@@ -2,10 +2,8 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exeption.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.sql.ConnectionFactory;
-import ru.javawebinar.basejava.util.SqlHelper;
+import ru.javawebinar.basejava.sql.SqlHelper;
 
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -13,69 +11,73 @@ import java.util.Collections;
 import java.util.List;
 
 public class SqlStorage implements Storage {
-    private final ConnectionFactory connectionFactory;
+    private SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
-        connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+        sqlHelper = new SqlHelper(dbUrl, dbUser, dbPassword);
     }
 
     @Override
     public void clear() {
-        SqlHelper.processingSQL(connectionFactory, "DELETE FROM resume",
+        sqlHelper.processingSQL("DELETE FROM resume",
                 PreparedStatement::execute);
     }
 
     @Override
     public void update(Resume resume) {
-        SqlHelper.processingSQL(connectionFactory, "UPDATE resume set full_name = ? WHERE uuid = ?",
+        sqlHelper.processingSQL("UPDATE resume set full_name = ? WHERE uuid = ?",
                 ps -> {
-                    get(resume.getUuid());
                     ps.setString(1, resume.getFullName());
                     ps.setString(2, resume.getUuid());
-                    ps.execute();
+                    if (ps.executeUpdate() != 1) {
+                        throw new NotExistStorageException(resume.getUuid());
+                    }
+                    return null;
                 });
     }
 
     @Override
     public void save(Resume resume) {
-        SqlHelper.processingSQL(connectionFactory, "INSERT INTO resume (uuid, full_name) VALUES (?, ?)",
+        sqlHelper.processingSQL("INSERT INTO resume (uuid, full_name) VALUES (?, ?)",
                 ps -> {
                     ps.setString(1, resume.getUuid());
                     ps.setString(2, resume.getFullName());
                     ps.execute();
+                    return null;
                 });
     }
 
     @Override
     public Resume get(String uuid) {
-        List<String> fullName = new ArrayList<>(1);
-        SqlHelper.processingSQL(connectionFactory, "SELECT * FROM resume r WHERE r.uuid =?",
+        String fullName = sqlHelper.processingSQL("SELECT * FROM resume r WHERE r.uuid =?",
                 ps -> {
                     ps.setString(1, uuid);
                     ResultSet rs = ps.executeQuery();
                     if (!rs.next()) {
                         throw new NotExistStorageException(uuid);
                     }
-                    fullName.add(rs.getString("full_name"));
-
+                    return rs.getString("full_name");
                 });
-        return new Resume(uuid, fullName.get(0));
+        return new Resume(uuid, fullName);
     }
 
     @Override
     public void delete(String uuid) {
-        SqlHelper.processingSQL(connectionFactory, "DELETE FROM resume r WHERE r.uuid = ?",
+        sqlHelper.processingSQL("DELETE FROM resume r WHERE r.uuid = ?",
                 ps -> {
-                    get(uuid);
                     ps.setString(1, uuid);
                     ps.execute();
+                    if (ps.executeUpdate() != 1) {
+                        throw new NotExistStorageException(uuid);
+                    }
+                    return null;
                 });
     }
 
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> result = new ArrayList<>();
-        SqlHelper.processingSQL(connectionFactory, "SELECT * FROM resume",
+        return sqlHelper.processingSQL("SELECT * FROM resume",
                 ps -> {
                     ResultSet rs = ps.executeQuery();
                     while (rs.next()) {
@@ -83,20 +85,21 @@ public class SqlStorage implements Storage {
                                 rs.getString("full_name")));
                     }
                     Collections.sort(result);
+                    return result;
                 });
-        return result;
     }
+
 
     @Override
     public int size() {
-        List<Integer> size = new ArrayList<>(1);
-        SqlHelper.processingSQL(connectionFactory, "SELECT COUNT(*) AS COUNT FROM resume",
+        return sqlHelper.processingSQL("SELECT COUNT(*) AS COUNT FROM resume",
                 ps -> {
+                    int result = 0;
                     ResultSet rs = ps.executeQuery();
                     if (rs.next()) {
-                        size.add(rs.getInt("COUNT"));
+                        result = rs.getInt("COUNT");
                     }
+                    return result;
                 });
-        return size.get(0);
     }
 }
