@@ -11,6 +11,7 @@ import ru.javawebinar.basejava.model.Resume;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -19,10 +20,10 @@ public class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
     protected Storage storage;
 
-    private static final String UUID_1 = "uuid1";
-    private static final String UUID_2 = "uuid2";
-    private static final String UUID_3 = "uuid3";
-    private static final String UUID_4 = "uuid4";
+    private static final String UUID_1 = UUID.randomUUID().toString();
+    private static final String UUID_2 = UUID.randomUUID().toString();
+    private static final String UUID_3 = UUID.randomUUID().toString();
+    private static final String UUID_4 = UUID.randomUUID().toString();
 
     private static final ResumeTestData RESUME_1;
     private static final ResumeTestData RESUME_2;
@@ -32,7 +33,7 @@ public class AbstractStorageTest {
     static {
         RESUME_1 = new ResumeTestData(UUID_1, "Name1");
         RESUME_2 = new ResumeTestData(UUID_2, "Name2");
-        RESUME_3 = new ResumeTestData(UUID_3, "Name2");
+        RESUME_3 = new ResumeTestData(UUID_3, "Name3");
         RESUME_4 = new ResumeTestData(UUID_4, "Name4");
     }
 
