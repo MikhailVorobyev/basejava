@@ -17,7 +17,6 @@ public class ResumeTestData {
 
     public ResumeTestData(String uuid, String fullName) {
         resume = new Resume(uuid, fullName);
-/*
 
         //Contacts
         resume.addContact(ContactType.PHONE, "+7(921) 855-0482");
@@ -29,6 +28,7 @@ public class ResumeTestData {
         resume.addContact(ContactType.HOME_PAGE, "http://gkislin.ru/");
 
 
+/*
         //Objective
         Section objective = new StringSection("Ведущий стажировок и корпоративного обучения по " +
                 "Java Web и Enterprise технологиям");
