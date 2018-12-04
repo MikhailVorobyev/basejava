@@ -1,9 +1,6 @@
 package ru.javawebinar.basejava;
 
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.model.Section;
-import ru.javawebinar.basejava.model.SectionType;
+import ru.javawebinar.basejava.model.*;
 
 import java.util.Map;
 import java.util.UUID;
@@ -15,31 +12,31 @@ public class ResumeTestData {
         resume = new Resume(uuid, fullName);
     }
 
-    public Resume addContacts1() {
+    public ResumeTestData addContacts1() {
         resume.addContact(ContactType.PHONE, "1111111");
         resume.addContact(ContactType.SKYPE, "skype1");
-        return resume;
+        return this;
     }
 
-    public Resume addContacts2() {
+    public ResumeTestData addContacts2() {
         resume.addContact(ContactType.PHONE, "2222222");
         resume.addContact(ContactType.SKYPE, "skype2");
         resume.addContact(ContactType.EMAIL, "mail1@yandex.ru");
         resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/linkedin1");
-        return resume;
+        return this;
     }
 
-    public Resume addContacts3() {
+    public ResumeTestData addContacts3() {
         resume.addContact(ContactType.PHONE, "3333333");
         resume.addContact(ContactType.SKYPE, "skype3");
         resume.addContact(ContactType.EMAIL, "mail2@yandex.ru");
         resume.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/linkedin2");
         resume.addContact(ContactType.GITHUB, "https://github.com/github1");
         resume.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/stackoverflow1");
-        return resume;
+        return this;
     }
 
-    public Resume addContacts4() {
+    public ResumeTestData addContacts4() {
         resume.addContact(ContactType.PHONE, "4444444");
         resume.addContact(ContactType.SKYPE, "skype4");
         resume.addContact(ContactType.EMAIL, "mail3@yandex.ru");
@@ -47,7 +44,41 @@ public class ResumeTestData {
         resume.addContact(ContactType.GITHUB, "https://github.com/github2");
         resume.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/stackoverflow2");
         resume.addContact(ContactType.HOME_PAGE, "http://homepage.ru/");
-        return resume;
+        return this;
+    }
+
+    public ResumeTestData addSections1() {
+        resume.addSection(SectionType.OBJECTIVE, new StringSection("Objective1"));
+        resume.addSection(SectionType.PERSONAL, new StringSection("Personal_data1"));
+        return this;
+    }
+
+    public ResumeTestData addSections2() {
+        resume.addSection(SectionType.OBJECTIVE, new StringSection("Objective2"));
+        resume.addSection(SectionType.PERSONAL, new StringSection("Personal_data2"));
+        resume.addSection(SectionType.ACHIEVEMENT,
+                new ListStringSection("Achievement1", "Achievement2", "Achievement3"));
+        return this;
+    }
+
+    public ResumeTestData addSections3() {
+        resume.addSection(SectionType.OBJECTIVE, new StringSection("Objective3"));
+        resume.addSection(SectionType.PERSONAL, new StringSection("Personal_data3"));
+        resume.addSection(SectionType.ACHIEVEMENT,
+                new ListStringSection("Achievement4", "Achievement5", "Achievement6"));
+        resume.addSection(SectionType.QUALIFICATIONS,
+                new ListStringSection("Qualifications1", "Qualifications2", "Qualifications3"));
+        return this;
+    }
+
+    public ResumeTestData addSections4() {
+        resume.addSection(SectionType.OBJECTIVE, new StringSection("Objective4"));
+        resume.addSection(SectionType.PERSONAL, new StringSection("Personal_data4"));
+        resume.addSection(SectionType.ACHIEVEMENT,
+                new ListStringSection("Achievement7", "Achievement8", "Achievement9"));
+        resume.addSection(SectionType.QUALIFICATIONS,
+                new ListStringSection("Qualifications4", "Qualifications5", "Qualifications6"));
+        return this;
     }
 
     public Resume getResume() {

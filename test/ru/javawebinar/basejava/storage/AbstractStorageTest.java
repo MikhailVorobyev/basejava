@@ -31,10 +31,10 @@ public class AbstractStorageTest {
     private static final Resume RESUME_4;
 
     static {
-        RESUME_1 = new ResumeTestData(UUID_1, "Name1").addContacts1();
-        RESUME_2 = new ResumeTestData(UUID_2, "Name2").addContacts2();
-        RESUME_3 = new ResumeTestData(UUID_3, "Name3").addContacts3();
-        RESUME_4 = new ResumeTestData(UUID_4, "Name4").addContacts4();
+        RESUME_1 = new ResumeTestData(UUID_1, "Name1").addContacts1().addSections1().getResume();
+        RESUME_2 = new ResumeTestData(UUID_2, "Name2").addContacts2().addSections2().getResume();
+        RESUME_3 = new ResumeTestData(UUID_3, "Name3").addContacts3().addSections3().getResume();
+        RESUME_4 = new ResumeTestData(UUID_4, "Name4").addContacts4().addSections4().getResume();
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -86,7 +86,7 @@ public class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume newResume = new ResumeTestData(UUID_1, "New Name").addContacts3();
+        Resume newResume = new ResumeTestData(UUID_1, "New Name").addContacts3().addSections3().getResume();
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_1));
     }
