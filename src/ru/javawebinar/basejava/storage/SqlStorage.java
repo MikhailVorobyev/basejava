@@ -52,7 +52,6 @@ public class SqlStorage implements Storage {
                 });
     }
 
-
     @Override
     public void save(Resume resume) {
         sqlHelper.transactionalExecute(conn -> {
@@ -128,32 +127,15 @@ public class SqlStorage implements Storage {
                 }
             }
             try (PreparedStatement ps = conn.prepareStatement("" +
-                    "  SELECT * FROM contact c " +
-                    "   WHERE c.resume_uuid =? ")) {
+                    "  SELECT * FROM contact ")) {
                 doAdd(ps, resumeMap, this::addContact);
             }
             try (PreparedStatement ps = conn.prepareStatement("" +
-                    " SELECT * FROM section s" +
-                    " WHERE s.resume_uuid = ? ")) {
+                    " SELECT * FROM section ")) {
                 doAdd(ps, resumeMap, this::addSection);
             }
             return new ArrayList<>(resumeMap.values());
         });
-    }
-
-    @FunctionalInterface
-    public interface ResumeExecutor {
-        void execute(ResultSet rs, Resume resume) throws SQLException;
-    }
-
-    private void doAdd(PreparedStatement ps, Map<String, Resume> map, ResumeExecutor executor) throws SQLException {
-        for (Map.Entry<String, Resume> entry : map.entrySet()) {
-            ps.setString(1, entry.getKey());
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                executor.execute(rs, entry.getValue());
-            }
-        }
     }
 
     @Override
@@ -196,16 +178,30 @@ public class SqlStorage implements Storage {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         ListStringSection lss = (ListStringSection) e.getValue();
-                        StringBuilder sb = new StringBuilder();
-                        for (String s : lss.getItems()) {
-                            sb.append(s).append('\n');
-                        }
-                        sb.delete(sb.length() - 1, sb.length());
-                        ps.setString(3, sb.toString());
+                        ps.setString(3, String.join("\n", lss.getItems()));
                 }
                 ps.addBatch();
             }
             ps.executeBatch();
+        }
+    }
+
+    @FunctionalInterface
+    public interface ResumeExecutor {
+        void execute(ResultSet rs, Resume resume) throws SQLException;
+    }
+
+    private void doAdd(PreparedStatement ps, Map<String, Resume> map, ResumeExecutor executor) throws SQLException {
+        ResultSet rs = ps.executeQuery();
+        Resume resume = null;
+        String uuid = null;
+        while (rs.next()) {
+            String newUuid = rs.getString("resume_uuid");
+            if (!newUuid.equals(uuid)) {
+                resume = map.get(newUuid);
+            }
+            uuid = newUuid;
+            executor.execute(rs, resume);
         }
     }
 
