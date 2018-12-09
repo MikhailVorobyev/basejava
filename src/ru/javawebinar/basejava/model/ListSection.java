@@ -5,19 +5,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class ListStringSection extends Section implements Serializable {
+public class ListSection extends Section implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private List<String> items;
 
-    public ListStringSection() {
+    public ListSection() {
     }
 
-    public ListStringSection(String... items) {
+    public ListSection(String... items) {
         this(Arrays.asList(items));
     }
 
-    public ListStringSection(List<String> items) {
+    public ListSection(List<String> items) {
         Objects.requireNonNull(items, "items must not be null");
         this.items = items;
     }
@@ -31,7 +31,7 @@ public class ListStringSection extends Section implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ListStringSection that = (ListStringSection) o;
+        ListSection that = (ListSection) o;
 
         return items.equals(that.items);
     }

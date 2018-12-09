@@ -3,39 +3,21 @@ package ru.javawebinar.basejava.storage;
 import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.basejava.Config;
-import ru.javawebinar.basejava.ResumeTestData;
 import ru.javawebinar.basejava.exeption.ExistStorageException;
 import ru.javawebinar.basejava.exeption.NotExistStorageException;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import static junit.framework.TestCase.assertEquals;
+import static ru.javawebinar.basejava.TestData.*;
 
 
 public class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
     protected Storage storage;
-
-    private static final String UUID_1 = UUID.randomUUID().toString();
-    private static final String UUID_2 = UUID.randomUUID().toString();
-    private static final String UUID_3 = UUID.randomUUID().toString();
-    private static final String UUID_4 = UUID.randomUUID().toString();
-
-    private static final Resume RESUME_1;
-    private static final Resume RESUME_2;
-    private static final Resume RESUME_3;
-    private static final Resume RESUME_4;
-
-    static {
-        RESUME_1 = new ResumeTestData(UUID_1, "Name1").addContacts1().addSections1().getResume();
-        RESUME_2 = new ResumeTestData(UUID_2, "Name2").addContacts2().addSections2().getResume();
-        RESUME_3 = new ResumeTestData(UUID_3, "Name3").addContacts3().addSections3().getResume();
-        RESUME_4 = new ResumeTestData(UUID_4, "Name4").addContacts4().addSections4().getResume();
-    }
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -86,7 +68,13 @@ public class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume newResume = new ResumeTestData(UUID_1, "New Name").addContacts3().addSections3().getResume();
+        Resume newResume = new Resume(UUID_1, "New Name");
+        newResume.addContact(ContactType.EMAIL, "newmail@google.com");
+        newResume.addContact(ContactType.SKYPE, "NewSkype");
+        newResume.addSection(SectionType.OBJECTIVE, new TextSection("New objective"));
+        newResume.addSection(SectionType.PERSONAL, new TextSection("New personal"));
+        newResume.addSection(SectionType.ACHIEVEMENT, new ListSection("New achievement1",
+                "new achievement2", "new achievement3"));
         storage.update(newResume);
         assertEquals(newResume, storage.get(UUID_1));
     }

@@ -17,20 +17,20 @@ import static ru.javawebinar.basejava.util.DateUtil.NOW;
 import static ru.javawebinar.basejava.util.DateUtil.of;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Institution implements Serializable {
+public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Link homePage;
     private List<Position> positions = new ArrayList<>();
 
-    public Institution() {
+    public Organization() {
     }
 
-    public Institution(String name, String url, Position... positions) {
+    public Organization(String name, String url, Position... positions) {
         this(new Link(name, url), Arrays.asList(positions));
     }
 
-    public Institution(Link homePage, List<Position> positions) {
+    public Organization(Link homePage, List<Position> positions) {
         this.homePage = homePage;
         this.positions = positions;
     }
@@ -48,7 +48,7 @@ public class Institution implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Institution that = (Institution) o;
+        Organization that = (Organization) o;
 
         if (!homePage.equals(that.homePage)) return false;
         return positions.equals(that.positions);
@@ -63,7 +63,7 @@ public class Institution implements Serializable {
 
     @Override
     public String toString() {
-        return "Institution{" +
+        return "Organization{" +
                 "homePage=" + homePage +
                 ", positions=" + positions +
                 '}';

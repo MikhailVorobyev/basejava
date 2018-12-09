@@ -33,18 +33,18 @@ public class DataStreamSerializer implements StreamSerializer {
         switch (sectionType) {
             case OBJECTIVE:
             case PERSONAL:
-                dos.writeUTF(((StringSection) section).getContent());
+                dos.writeUTF(((TextSection) section).getContent());
                 break;
             case ACHIEVEMENT:
             case QUALIFICATIONS:
-                writeForEach(dos, ((ListStringSection) section).getItems(), dos::writeUTF);
+                writeForEach(dos, ((ListSection) section).getItems(), dos::writeUTF);
                 break;
             case EXPERIENCE:
             case EDUCATION:
-                writeForEach(dos, ((InstitutionSection) section).getInstitutions(), institution -> {
-                    dos.writeUTF(institution.getHomePage().getName());
-                    dos.writeUTF(institution.getHomePage().getUrl());
-                    writeForEach(dos, institution.getPositions(), position -> {
+                writeForEach(dos, ((OrganizationSection) section).getOrganizations(), organization -> {
+                    dos.writeUTF(organization.getHomePage().getName());
+                    dos.writeUTF(organization.getHomePage().getUrl());
+                    writeForEach(dos, organization.getPositions(), position -> {
                         writeLocalDate(dos, position.getStartDate());
                         writeLocalDate(dos, position.getEndDate());
                         dos.writeUTF(position.getTitle());
@@ -85,17 +85,17 @@ public class DataStreamSerializer implements StreamSerializer {
         switch (sectionType) {
             case OBJECTIVE:
             case PERSONAL:
-                section = new StringSection(dis.readUTF());
+                section = new TextSection(dis.readUTF());
                 break;
             case ACHIEVEMENT:
             case QUALIFICATIONS:
-                section = new ListStringSection(readForEach(dis, dis::readUTF));
+                section = new ListSection(readForEach(dis, dis::readUTF));
                 break;
             case EXPERIENCE:
             case EDUCATION:
-                section = new InstitutionSection(readForEach(dis, () ->
-                        new Institution(new Link(dis.readUTF(), dis.readUTF()),
-                                readForEach(dis, () -> new Institution.Position(
+                section = new OrganizationSection(readForEach(dis, () ->
+                        new Organization(new Link(dis.readUTF(), dis.readUTF()),
+                                readForEach(dis, () -> new Organization.Position(
                                         readLocalDate(dis),
                                         readLocalDate(dis),
                                         dis.readUTF(),
