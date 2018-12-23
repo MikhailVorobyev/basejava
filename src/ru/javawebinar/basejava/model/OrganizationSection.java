@@ -45,4 +45,12 @@ public class OrganizationSection extends Section implements Serializable {
     public String toString() {
         return organizations.toString();
     }
+
+    public String toHtml() {
+        StringBuilder sb = new StringBuilder();
+        for (Organization org : organizations) {
+            sb.append(org.toHtml());
+        }
+        return sb.toString();
+    }
 }

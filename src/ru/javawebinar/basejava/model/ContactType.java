@@ -16,10 +16,30 @@ public enum ContactType {
             return getTitle() + ": " + toLink("mailto:" + value, value);
         }
     },
-    LINKEDIN("Профиль LinkedIn"),
-    GITHUB("Профиль GitHub"),
-    STACKOVERFLOW("Профиль Stackoverflow"),
-    HOME_PAGE("Домашняя страница");
+    LINKEDIN("Профиль LinkedIn") {
+        @Override
+        public String toHtml0(String value) {
+            return getTitle() + ": " + toLink(value, value);
+        }
+    },
+    GITHUB("Профиль GitHub") {
+        @Override
+        public String toHtml0(String value) {
+            return getTitle() + ": " + toLink(value, value);
+        }
+    },
+    STACKOVERFLOW("Профиль Stackoverflow") {
+        @Override
+        public String toHtml0(String value) {
+            return getTitle() + ": " + toLink(value, value);
+        }
+    },
+    HOME_PAGE("Домашняя страница") {
+        @Override
+        public String toHtml0(String value) {
+            return getTitle() + ": " + toLink(value, value);
+        }
+    };
 
     private final String title;
 

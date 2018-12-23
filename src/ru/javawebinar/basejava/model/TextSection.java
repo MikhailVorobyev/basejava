@@ -39,4 +39,8 @@ public class TextSection extends Section implements Serializable {
     public String toString() {
         return content + '\n';
     }
+
+    public String toHtml() {
+        return toString();
+    }
 }

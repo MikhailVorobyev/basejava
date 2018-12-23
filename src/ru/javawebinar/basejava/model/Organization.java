@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava.model;
 
+import ru.javawebinar.basejava.util.HtmlUtil;
 import ru.javawebinar.basejava.util.LocalDateAdapter;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -143,6 +144,23 @@ public class Organization implements Serializable {
         public String toString() {
             return "Position(" + startDate + ',' + endDate + ',' + title + ',' + description + ')';
         }
+
+        public String toHtml() {
+            String result = "<table>";
+            result += "<tr><td width=\"130\" style=\"vertical-align: top\">" + HtmlUtil.getDate(startDate)
+                    + "-" + HtmlUtil.getDate(endDate) + "</td>";
+            result += "<td><b>" + title + "</b><br/>" + description + "</td>";
+            result += "</table>";
+            return result;
+        }
     }
 
+    public String toHtml() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(homePage.toHtml()).append("<br/>");
+        for (Position position : positions) {
+            sb.append(position.toHtml());
+        }
+        return sb.toString();
+    }
 }

@@ -45,4 +45,11 @@ public class ListSection extends Section implements Serializable {
     public String toString() {
         return items.toString();
     }
+
+    public String toHtml() {
+        String result = "<ul><li>";
+        result += String.join("</li><li>", items);
+        result += "</li></ul>";
+        return result;
+    }
 }

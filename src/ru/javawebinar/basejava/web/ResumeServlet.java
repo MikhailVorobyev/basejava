@@ -1,8 +1,7 @@
 package ru.javawebinar.basejava.web;
 
 import ru.javawebinar.basejava.Config;
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.storage.Storage;
 
 import javax.servlet.ServletException;
@@ -10,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
     private Storage storage;
@@ -28,10 +29,37 @@ public class ResumeServlet extends HttpServlet {
         resume.setFullName(fullName);
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
-            if (value != null && value.trim().length() != 0) {
+            if (value != null || value.trim().length() != 0) {
                 resume.addContact(type, value);
             } else {
                 resume.getContacts().remove(type);
+            }
+        }
+
+        for (SectionType type : SectionType.values()) {
+            if (type.equals(SectionType.OBJECTIVE) ||
+                    type.equals(SectionType.PERSONAL)) {
+                String value = request.getParameter(type.name());
+                if (value != null && value.trim().length() != 0) {
+                    resume.addSection(type, new TextSection(value));
+                } else {
+                    resume.getSections().remove(type);
+                }
+            }
+
+            if (type.equals(SectionType.ACHIEVEMENT) ||
+                    type.equals(SectionType.QUALIFICATIONS)) {
+                String[] listSections = request.getParameterValues(type.name());
+                if (listSections == null) {
+                    continue;
+                }
+                List<String> list = new ArrayList<>();
+                for (String value : listSections) {
+                    if (value != null && value.trim().length() != 0) {
+                        list.add(value);
+                    }
+                }
+                resume.addSection(type, new ListSection(list));
             }
         }
         storage.update(resume);
@@ -61,7 +89,7 @@ public class ResumeServlet extends HttpServlet {
         }
         request.setAttribute("resume", resume);
         request.getRequestDispatcher(
-                ("view".equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")
+                ("view" .equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")
         ).forward(request, response);
     }
 }
