@@ -23,13 +23,19 @@ public class ResumeServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String uuid = request.getParameter("uuid");
+        Resume resume;
         String fullName = request.getParameter("fullName");
-        Resume resume = storage.get(uuid);
-        resume.setFullName(fullName);
+        String uuid = request.getParameter("uuid");
+        if (uuid == null) {
+            resume = new Resume(fullName);
+        } else {
+            resume = storage.get(uuid);
+            resume.setFullName(fullName);
+        }
+
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
-            if (value != null || value.trim().length() != 0) {
+            if (value != null && value.trim().length() != 0) {
                 resume.addContact(type, value);
             } else {
                 resume.getContacts().remove(type);
@@ -37,32 +43,41 @@ public class ResumeServlet extends HttpServlet {
         }
 
         for (SectionType type : SectionType.values()) {
-            if (type.equals(SectionType.OBJECTIVE) ||
-                    type.equals(SectionType.PERSONAL)) {
-                String value = request.getParameter(type.name());
-                if (value != null && value.trim().length() != 0) {
-                    resume.addSection(type, new TextSection(value));
-                } else {
-                    resume.getSections().remove(type);
-                }
-            }
-
-            if (type.equals(SectionType.ACHIEVEMENT) ||
-                    type.equals(SectionType.QUALIFICATIONS)) {
-                String[] listSections = request.getParameterValues(type.name());
-                if (listSections == null) {
-                    continue;
-                }
-                List<String> list = new ArrayList<>();
-                for (String value : listSections) {
+            switch (type) {
+                case OBJECTIVE:
+                case PERSONAL:
+                    String value = request.getParameter(type.name());
                     if (value != null && value.trim().length() != 0) {
-                        list.add(value);
+                        resume.addSection(type, new TextSection(value));
+                    } else {
+                        resume.getSections().remove(type);
                     }
-                }
-                resume.addSection(type, new ListSection(list));
+                    break;
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    String param = request.getParameter(type.name());
+                    if (param != null) {
+                        String[] items = param.split("\n");
+                        List<String> list = new ArrayList<>();
+                        for (String item : items) {
+                            if (item.trim().length() != 0) {
+                                list.add(item);
+                            }
+                        }
+                        if (list.size() != 0) {
+                            resume.addSection(type, new ListSection(list));
+                        } else {
+                            resume.getSections().remove(type);
+                        }
+                    }
+                    break;
             }
         }
-        storage.update(resume);
+        if (uuid == null) {
+            storage.save(resume);
+        } else {
+            storage.update(resume);
+        }
         response.sendRedirect("resume");
     }
 
@@ -83,13 +98,16 @@ public class ResumeServlet extends HttpServlet {
             case "view":
             case "edit":
                 resume = storage.get(uuid);
+                request.setAttribute("resume", resume);
+                request.getRequestDispatcher(
+                        ("view".equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")
+                ).forward(request, response);
+                break;
+            case "add":
+                request.getRequestDispatcher("/WEB-INF/jsp/add.jsp").forward(request, response);
                 break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");
         }
-        request.setAttribute("resume", resume);
-        request.getRequestDispatcher(
-                ("view" .equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")
-        ).forward(request, response);
     }
 }

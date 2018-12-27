@@ -1,11 +1,10 @@
 package ru.javawebinar.basejava.model;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class ListSection extends Section implements Serializable {
+public class ListSection extends Section {
     private static final long serialVersionUID = 1L;
 
     private List<String> items;
@@ -43,13 +42,17 @@ public class ListSection extends Section implements Serializable {
 
     @Override
     public String toString() {
-        return items.toString();
+        return String.join("\n", items);
     }
 
     public String toHtml() {
-        String result = "<ul><li>";
-        result += String.join("</li><li>", items);
-        result += "</li></ul>";
-        return result;
+        StringBuilder sb = new StringBuilder("<ul>");
+        for (String item : items) {
+            sb.append("<li>")
+                    .append(item)
+                    .append("</li>");
+        }
+        sb.append("</ul>");
+        return sb.toString();
     }
 }

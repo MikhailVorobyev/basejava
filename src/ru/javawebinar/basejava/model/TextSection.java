@@ -1,9 +1,8 @@
 package ru.javawebinar.basejava.model;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class TextSection extends Section implements Serializable {
+public class TextSection extends Section {
     private static final long serialVersionUID = 1L;
 
     private String content;
@@ -37,7 +36,7 @@ public class TextSection extends Section implements Serializable {
 
     @Override
     public String toString() {
-        return content + '\n';
+        return content;
     }
 
     public String toHtml() {
