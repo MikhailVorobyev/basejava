@@ -1,9 +1,9 @@
-<%@ page import="ru.javawebinar.basejava.model.ContactType" %>
-<%@ page import="ru.javawebinar.basejava.model.ListSection" %>
-<%@ page import="ru.javawebinar.basejava.model.SectionType" %>
-<%@ page import="ru.javawebinar.basejava.util.HtmlUtil" %>
+<%@ page import="ru.javawebinar.basejava.model.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%!
+    private int count = 0;
+%>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
@@ -33,7 +33,7 @@
                 <c:when test="${SectionType.OBJECTIVE.equals(type)
                                 || SectionType.PERSONAL.equals(type)}">
                     <dl>
-                        <dt>${type.title}</dt>
+                        <dt><b>${type.title}</b></dt>
                         <dd><textarea rows="4" cols="80" name="${type.name()}">${resume.getSection(type)}</textarea>
                         </dd>
                     </dl>
@@ -41,16 +41,87 @@
                 <c:when test="${SectionType.ACHIEVEMENT.equals(type)
                                 || SectionType.QUALIFICATIONS.equals(type)}">
                     <dl>
-                        <dt>${type.title}</dt>
+                        <dt><b>${type.title}</b></dt>
                         <dd><textarea rows="8" cols="100" name="${type.name()}">${resume.getSection(type)}</textarea>
                         </dd>
                     </dl>
+                </c:when>
+                <c:when test="${SectionType.EXPERIENCE.equals(type)
+                                || SectionType.EDUCATION.equals(type)}">
+                    <h4>${type.title}:</h4>
+                    <jsp:useBean id="type" type="ru.javawebinar.basejava.model.SectionType"/>
+                    <c:if test="${not empty resume.getSection(type)}">
+                        <c:forEach var="org"
+                                   items="<%=((OrganizationSection) resume.getSection(type)).getOrganizations()%>">
+                            <input type="hidden" name="${type}orgHash" value="${org.hashCode()}">
+                            <dl>
+                                <dt>Название:</dt>
+                                <dd><input type="text" name="${type}name" size=80 value="${org.homePage.name}">
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt>URL:</dt>
+                                <dd><input type="text" name="${type}url" size=80 value="${org.homePage.url}"></dd>
+                            </dl>
+                            <c:forEach var="position" items="${org.positions}">
+                                <dt>Дата начала:</dt>
+                                <dd><input type="date"
+                                           name="${type}${org.hashCode()}startDate"
+                                           value="${position.startDate}"/></dd>
+                                </dl>
+                                <dl>
+                                    <dt>Дата окончания:</dt>
+                                    <dd><input type="date"
+                                               name="${type}${org.hashCode()}endDate"
+                                               value="${position.endDate}"/></dd>
+                                </dl>
+                                <dl>
+                                    <dt>Позиция:</dt>
+                                    <dd><textarea rows="3" cols="80"
+                                                  name="${type}${org.hashCode()}title">${position.title}</textarea>
+                                    </dd>
+                                </dl>
+                                <dl>
+                                    <dt>Описание:</dt>
+                                    <dd><textarea rows="8" cols="100"
+                                                  name="${type}${org.hashCode()}description">${position.description}</textarea>
+                                    </dd>
+                                </dl>
+                                <br/>
+                            </c:forEach>
+                            <table border="1" cellpadding="8" cellspacing="0">
+                                <tr>
+                                    <th>Добавить позицию:&nbsp;</th>
+                                    <th>
+                                        <a href="resume?uuid=${resume.uuid}&action=addPosition&type=${type}&organizationName=${org.homePage.name}"><img
+                                             src="img/add.png"></a></th>
+                                </tr>
+                            </table>
+                            <br/>
+                        </c:forEach>
+                    </c:if>
+                    <table border="1" cellpadding="8" cellspacing="0">
+                        <tr>
+                            <c:if test="${SectionType.EXPERIENCE.equals(type)}">
+                                <th width="214" align="left">Добавить место работы:&nbsp;</th>
+                                <th><a href="resume?uuid=${resume.uuid}&action=addOrganization&type=${type}"><img
+                                        src="img/add.png"></a>
+                                </th>
+                            </c:if>
+                            <c:if test="${SectionType.EDUCATION.equals(type)}">
+                                <th width="214" align="left">Добавить учебное заведение:&nbsp;</th>
+                                <th><a href="resume?uuid=${resume.uuid}&action=addOrganization&type=${type}"><img
+                                        src="img/add.png"></a>
+                                </th>
+                            </c:if>
+                        </tr>
+                    </table>
                 </c:when>
             </c:choose>
         </c:forEach>
         <hr>
         <button type="submit">Сохранить</button>
-        <button onclick="window.history.back()">Отменить</button>
+        <button type="reset" onclick="window.history.back()">Отменить</button>
     </form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
