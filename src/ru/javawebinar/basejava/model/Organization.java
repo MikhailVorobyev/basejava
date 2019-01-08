@@ -20,6 +20,8 @@ import static ru.javawebinar.basejava.util.DateUtil.of;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
+    private static int count = 0;
+    private final int id = count++;
 
     private Link homePage;
     private List<Position> positions = new ArrayList<>();
@@ -34,6 +36,10 @@ public class Organization implements Serializable {
     public Organization(Link homePage, List<Position> positions) {
         this.homePage = homePage;
         this.positions = positions;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public Link getHomePage() {

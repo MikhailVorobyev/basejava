@@ -11,7 +11,7 @@ public class HtmlUtil {
         if (localDate.toEpochDay() >= LocalDate.now().toEpochDay()) {
             return "Сейчас";
         }
-        return localDate.format(DateTimeFormatter.ofPattern("MM/YYYY"));
+        return localDate.format(DateTimeFormatter.ofPattern("MM/yyyy"));
     }
 
     public static String getContact(Resume resume, ContactType contactType) {

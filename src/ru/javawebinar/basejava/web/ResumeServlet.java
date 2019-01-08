@@ -85,30 +85,37 @@ public class ResumeServlet extends HttpServlet {
                     case EXPERIENCE:
                     case EDUCATION:
                         List<Organization> organizations = new ArrayList<>();
-                        String[] name = request.getParameterValues(type + "name");
-                        String[] url = request.getParameterValues(type + "url");
-                        String[] orgHash = request.getParameterValues("" + type + "orgHash");
-                        if (name != null) {
-                            for (int i = 0; i < name.length; i++) {
-                                List<Organization.Position> positions = new ArrayList<>();
-                                String[] startDate = request.getParameterValues("" + type + orgHash[i] + "startDate");
-                                String[] endDate = request.getParameterValues("" + type + orgHash[i] + "endDate");
-                                String[] title = request.getParameterValues("" + type + orgHash[i] + "title");
-                                String[] description = request.getParameterValues("" + type + orgHash[i] + "description");
+                        String[] orgId = request.getParameterValues(type + "orgId");
+                        if (orgId == null) {
+                            break;
+                        }
+                        String[] name = new String[orgId.length];
+                        String[] url = new String[orgId.length];
+                        for (int i = 0; i < orgId.length; i++) {
+                            name[i] = request.getParameter(orgId[i] + "name");
+                            url[i] = request.getParameter(orgId[i] + "url");
+                        }
 
-                                if (startDate != null) {
-                                    for (int j = 0; j < startDate.length; j++) {
-                                        if (startDate[j].length() != 0) {
-                                            positions.add(new Organization.Position(DateUtil.parse(startDate[j]),
-                                                    DateUtil.parse(endDate[j]), title[j], description[j]));
-                                        }
+                        for (int i = 0; i < orgId.length; i++) {
+                            List<Organization.Position> positions = new ArrayList<>();
+                            String[] startDate = request.getParameterValues(orgId[i] + "startDate");
+                            String[] endDate = request.getParameterValues(orgId[i] + "endDate");
+                            String[] title = request.getParameterValues(orgId[i] + "title");
+                            String[] description = request.getParameterValues(orgId[i] + "description");
+
+                            if (startDate != null) {
+                                for (int j = 0; j < startDate.length; j++) {
+                                    if (startDate[j].length() != 0) {
+                                        positions.add(new Organization.Position(DateUtil.parse(startDate[j]),
+                                                DateUtil.parse(endDate[j]), title[j], description[j]));
                                     }
                                 }
-                                if (positions.size() != 0) {
-                                    organizations.add(new Organization(new Link(name[i], url[i]), positions));
-                                }
+                            }
+                            if (positions.size() != 0) {
+                                organizations.add(new Organization(new Link(name[i], url[i]), positions));
                             }
                         }
+
 
                         if (organizations.size() != 0) {
                             resume.addSection(type, new OrganizationSection(organizations));

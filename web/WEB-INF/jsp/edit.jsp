@@ -1,9 +1,6 @@
 <%@ page import="ru.javawebinar.basejava.model.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%!
-    private int count = 0;
-%>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
@@ -53,38 +50,38 @@
                     <c:if test="${not empty resume.getSection(type)}">
                         <c:forEach var="org"
                                    items="<%=((OrganizationSection) resume.getSection(type)).getOrganizations()%>">
-                            <input type="hidden" name="${type}orgHash" value="${org.hashCode()}">
+                            <input type="hidden" name="${type}orgId" value="${org.id}">
                             <dl>
                                 <dt>Название:</dt>
-                                <dd><input type="text" name="${type}name" size=80 value="${org.homePage.name}">
+                                <dd><input type="text" name="${org.id}name" size=80 value="${org.homePage.name}">
                                 </dd>
                             </dl>
                             <dl>
                                 <dt>URL:</dt>
-                                <dd><input type="text" name="${type}url" size=80 value="${org.homePage.url}"></dd>
+                                <dd><input type="text" name="${org.id}url" size=80 value="${org.homePage.url}"></dd>
                             </dl>
                             <c:forEach var="position" items="${org.positions}">
                                 <dt>Дата начала:</dt>
                                 <dd><input type="date"
-                                           name="${type}${org.hashCode()}startDate"
+                                           name="${org.id}startDate"
                                            value="${position.startDate}"/></dd>
                                 </dl>
                                 <dl>
                                     <dt>Дата окончания:</dt>
                                     <dd><input type="date"
-                                               name="${type}${org.hashCode()}endDate"
+                                               name="${org.id}endDate"
                                                value="${position.endDate}"/></dd>
                                 </dl>
                                 <dl>
                                     <dt>Позиция:</dt>
                                     <dd><textarea rows="3" cols="80"
-                                                  name="${type}${org.hashCode()}title">${position.title}</textarea>
+                                                  name="${org.id}title">${position.title}</textarea>
                                     </dd>
                                 </dl>
                                 <dl>
                                     <dt>Описание:</dt>
                                     <dd><textarea rows="8" cols="100"
-                                                  name="${type}${org.hashCode()}description">${position.description}</textarea>
+                                                  name="${org.id}description">${position.description}</textarea>
                                     </dd>
                                 </dl>
                                 <br/>
@@ -93,7 +90,7 @@
                                 <tr>
                                     <th>Добавить позицию:&nbsp;</th>
                                     <th>
-                                        <a href="resume?uuid=${resume.uuid}&action=addPosition&type=${type}&organizationName=${org.homePage.name}"><img
+<a href="resume?uuid=${resume.uuid}&action=addPosition&type=${type}&organizationName=${org.homePage.name}"><img
                                              src="img/add.png"></a></th>
                                 </tr>
                             </table>
