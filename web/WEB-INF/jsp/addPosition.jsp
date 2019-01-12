@@ -19,7 +19,7 @@
         <input type="hidden" name="uuid" value="${resume.uuid}">
         <input type="hidden" name="fullName" value="${resume.fullName}">
         <input type="hidden" name="type" value="${type}">
-        <input type="hidden" name="organizationName" value="${organization.homePage.name}">
+        <input type="hidden" name="orgUuid" value="${organization.uuid}">
         <dl>
             <dt>Дата начала:</dt>
             <dd><input type="date" name="startDate"></dd>

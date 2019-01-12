@@ -27,61 +27,58 @@
         <h3>Секции:</h3>
         <c:forEach var="type" items="<%=SectionType.values()%>">
             <c:choose>
-                <c:when test="${SectionType.OBJECTIVE.equals(type)
-                                || SectionType.PERSONAL.equals(type)}">
+                <c:when test="${type == 'OBJECTIVE' || type == 'PERSONAL'}">
                     <dl>
                         <dt><b>${type.title}</b></dt>
                         <dd><textarea rows="4" cols="80" name="${type.name()}">${resume.getSection(type)}</textarea>
                         </dd>
                     </dl>
                 </c:when>
-                <c:when test="${SectionType.ACHIEVEMENT.equals(type)
-                                || SectionType.QUALIFICATIONS.equals(type)}">
+                <c:when test="${type == 'QUALIFICATIONS' || type == 'ACHIEVEMENT'}">
                     <dl>
                         <dt><b>${type.title}</b></dt>
                         <dd><textarea rows="8" cols="100" name="${type.name()}">${resume.getSection(type)}</textarea>
                         </dd>
                     </dl>
                 </c:when>
-                <c:when test="${SectionType.EXPERIENCE.equals(type)
-                                || SectionType.EDUCATION.equals(type)}">
+                <c:when test="${type == 'EXPERIENCE' || type == 'EDUCATION'}">
                     <h4>${type.title}:</h4>
                     <jsp:useBean id="type" type="ru.javawebinar.basejava.model.SectionType"/>
                     <c:if test="${not empty resume.getSection(type)}">
                         <c:forEach var="org"
                                    items="<%=((OrganizationSection) resume.getSection(type)).getOrganizations()%>">
-                            <input type="hidden" name="${type}orgId" value="${org.id}">
+                            <input type="hidden" name="${type}orgUuid" value="${org.uuid}">
                             <dl>
                                 <dt>Название:</dt>
-                                <dd><input type="text" name="${org.id}name" size=80 value="${org.homePage.name}">
+                                <dd><input type="text" name="${org.uuid}name" size=80 value="${org.homePage.name}">
                                 </dd>
                             </dl>
                             <dl>
                                 <dt>URL:</dt>
-                                <dd><input type="text" name="${org.id}url" size=80 value="${org.homePage.url}"></dd>
+                                <dd><input type="text" name="${org.uuid}url" size=80 value="${org.homePage.url}"></dd>
                             </dl>
                             <c:forEach var="position" items="${org.positions}">
                                 <dt>Дата начала:</dt>
                                 <dd><input type="date"
-                                           name="${org.id}startDate"
+                                           name="${org.uuid}startDate"
                                            value="${position.startDate}"/></dd>
                                 </dl>
                                 <dl>
                                     <dt>Дата окончания:</dt>
                                     <dd><input type="date"
-                                               name="${org.id}endDate"
+                                               name="${org.uuid}endDate"
                                                value="${position.endDate}"/></dd>
                                 </dl>
                                 <dl>
                                     <dt>Позиция:</dt>
                                     <dd><textarea rows="3" cols="80"
-                                                  name="${org.id}title">${position.title}</textarea>
+                                                  name="${org.uuid}title">${position.title}</textarea>
                                     </dd>
                                 </dl>
                                 <dl>
                                     <dt>Описание:</dt>
                                     <dd><textarea rows="8" cols="100"
-                                                  name="${org.id}description">${position.description}</textarea>
+                                                  name="${org.uuid}description">${position.description}</textarea>
                                     </dd>
                                 </dl>
                                 <br/>
@@ -90,7 +87,7 @@
                                 <tr>
                                     <th>Добавить позицию:&nbsp;</th>
                                     <th>
-<a href="resume?uuid=${resume.uuid}&action=addPosition&type=${type}&organizationName=${org.homePage.name}"><img
+<a href="resume?uuid=${resume.uuid}&action=addPosition&type=${type}&orgUuid=${org.uuid}"><img
                                              src="img/add.png"></a></th>
                                 </tr>
                             </table>
@@ -99,13 +96,13 @@
                     </c:if>
                     <table border="1" cellpadding="8" cellspacing="0">
                         <tr>
-                            <c:if test="${SectionType.EXPERIENCE.equals(type)}">
+                            <c:if test="${type == 'EXPERIENCE'}">
                                 <th width="214" align="left">Добавить место работы:&nbsp;</th>
                                 <th><a href="resume?uuid=${resume.uuid}&action=addOrganization&type=${type}"><img
                                         src="img/add.png"></a>
                                 </th>
                             </c:if>
-                            <c:if test="${SectionType.EDUCATION.equals(type)}">
+                            <c:if test="${type == 'EDUCATION'}">
                                 <th width="214" align="left">Добавить учебное заведение:&nbsp;</th>
                                 <th><a href="resume?uuid=${resume.uuid}&action=addOrganization&type=${type}"><img
                                         src="img/add.png"></a>

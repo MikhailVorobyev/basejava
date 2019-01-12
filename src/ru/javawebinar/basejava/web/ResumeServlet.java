@@ -30,12 +30,8 @@ public class ResumeServlet extends HttpServlet {
         String fullName = request.getParameter("fullName");
         String sectionType = request.getParameter("type");
 
-        if (uuid == null) {
-            resume = new Resume(fullName);
-        } else {
-            resume = storage.get(uuid);
-            resume.setFullName(fullName);
-        }
+        resume = storage.get(uuid);
+        resume.setFullName(fullName);
 
         if (sectionType != null) {
             SectionType type = SectionType.valueOf(sectionType);
@@ -85,23 +81,23 @@ public class ResumeServlet extends HttpServlet {
                     case EXPERIENCE:
                     case EDUCATION:
                         List<Organization> organizations = new ArrayList<>();
-                        String[] orgId = request.getParameterValues(type + "orgId");
-                        if (orgId == null) {
+                        String[] orgUuid = request.getParameterValues(type + "orgUuid");
+                        if (orgUuid == null) {
                             break;
                         }
-                        String[] name = new String[orgId.length];
-                        String[] url = new String[orgId.length];
-                        for (int i = 0; i < orgId.length; i++) {
-                            name[i] = request.getParameter(orgId[i] + "name");
-                            url[i] = request.getParameter(orgId[i] + "url");
+                        String[] name = new String[orgUuid.length];
+                        String[] url = new String[orgUuid.length];
+                        for (int i = 0; i < orgUuid.length; i++) {
+                            name[i] = request.getParameter(orgUuid[i] + "name");
+                            url[i] = request.getParameter(orgUuid[i] + "url");
                         }
 
-                        for (int i = 0; i < orgId.length; i++) {
+                        for (int i = 0; i < orgUuid.length; i++) {
                             List<Organization.Position> positions = new ArrayList<>();
-                            String[] startDate = request.getParameterValues(orgId[i] + "startDate");
-                            String[] endDate = request.getParameterValues(orgId[i] + "endDate");
-                            String[] title = request.getParameterValues(orgId[i] + "title");
-                            String[] description = request.getParameterValues(orgId[i] + "description");
+                            String[] startDate = request.getParameterValues(orgUuid[i] + "startDate");
+                            String[] endDate = request.getParameterValues(orgUuid[i] + "endDate");
+                            String[] title = request.getParameterValues(orgUuid[i] + "title");
+                            String[] description = request.getParameterValues(orgUuid[i] + "description");
 
                             if (startDate != null) {
                                 for (int j = 0; j < startDate.length; j++) {
@@ -125,12 +121,8 @@ public class ResumeServlet extends HttpServlet {
                 }
             }
         }
+        storage.update(resume);
 
-        if (uuid == null) {
-            storage.save(resume);
-        } else {
-            storage.update(resume);
-        }
         if (sectionType != null) {
             response.sendRedirect("resume?uuid=" + resume.getUuid() + "&action=edit");
         } else {
@@ -142,7 +134,8 @@ public class ResumeServlet extends HttpServlet {
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
         String type = request.getParameter("type");
-        String organizationName = request.getParameter("organizationName");
+        String orgUuid = request.getParameter("orgUuid");
+
         if (action == null) {
             request.setAttribute("resumes", storage.getAllSorted());
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
@@ -163,6 +156,9 @@ public class ResumeServlet extends HttpServlet {
                 ).forward(request, response);
                 break;
             case "add":
+                Resume newResume = new Resume("");
+                storage.save(newResume);
+                request.setAttribute("resume", newResume);
                 request.getRequestDispatcher("/WEB-INF/jsp/add.jsp").forward(request, response);
                 break;
             case "addOrganization":
@@ -176,7 +172,7 @@ public class ResumeServlet extends HttpServlet {
                 request.setAttribute("type", SectionType.valueOf(type));
                 request.setAttribute("resume", resume);
                 request.setAttribute("organization",
-                        findOrganization(resume.getSection(SectionType.valueOf(type)), organizationName));
+                        findOrganization(resume.getSection(SectionType.valueOf(type)), orgUuid));
                 request.getRequestDispatcher("WEB-INF/jsp/addPosition.jsp").forward(request, response);
                 break;
             default:
@@ -184,17 +180,30 @@ public class ResumeServlet extends HttpServlet {
         }
     }
 
+    private Organization.Position createPosition(HttpServletRequest request) {
+        String startDate = request.getParameter("startDate");
+        if (startDate.length() == 0) {
+            return null;
+        }
+        LocalDate localStartDate = DateUtil.parse(request.getParameter("startDate"));
+        LocalDate localEndDate = DateUtil.parse(request.getParameter("endDate"));
+        String title = request.getParameter("title");
+        String description = request.getParameter("description");
+
+        return new Organization.Position(localStartDate, localEndDate, title, description);
+    }
+
     private Section addOrganization(HttpServletRequest request, Resume resume, SectionType type) {
         String name = request.getParameter("name");
         String url = request.getParameter("url");
-        String organizationName = request.getParameter("organizationName");
+        String orgUuid = request.getParameter("orgUuid");
 
         OrganizationSection section = (OrganizationSection) resume.getSection(type);
         Organization org = null;
-        Organization.Position position = addPosition(request);
+        Organization.Position position = createPosition(request);
         if (position != null) {
-            if (organizationName != null) {
-                org = findOrganization(section, organizationName);
+            if (orgUuid != null) {
+                org = findOrganization(section, orgUuid);
                 if (org != null) {
                     org.getPositions().add(position);
                     return section;
@@ -214,22 +223,9 @@ public class ResumeServlet extends HttpServlet {
         return section;
     }
 
-    private Organization.Position addPosition(HttpServletRequest request) {
-        String startDate = request.getParameter("startDate");
-        if (startDate.length() == 0) {
-            return null;
-        }
-        LocalDate localStartDate = DateUtil.parse(request.getParameter("startDate"));
-        LocalDate localEndDate = DateUtil.parse(request.getParameter("endDate"));
-        String title = request.getParameter("title");
-        String description = request.getParameter("description");
-
-        return new Organization.Position(localStartDate, localEndDate, title, description);
-    }
-
-    private Organization findOrganization(Section section, String organizationName) {
+    private Organization findOrganization(Section section, String orgUuid) {
         for (Organization organization : ((OrganizationSection) section).getOrganizations()) {
-            if (organization.getHomePage().getName().equals(organizationName)) {
+            if (organization.getUuid().equals(orgUuid)) {
                 return organization;
             }
         }

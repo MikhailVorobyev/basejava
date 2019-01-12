@@ -9,10 +9,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static ru.javawebinar.basejava.util.DateUtil.NOW;
 import static ru.javawebinar.basejava.util.DateUtil.of;
@@ -20,9 +17,8 @@ import static ru.javawebinar.basejava.util.DateUtil.of;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static int count = 0;
-    private final int id = count++;
 
+    private String uuid;
     private Link homePage;
     private List<Position> positions = new ArrayList<>();
 
@@ -34,12 +30,18 @@ public class Organization implements Serializable {
     }
 
     public Organization(Link homePage, List<Position> positions) {
+        this(UUID.randomUUID().toString(), homePage, positions);
+    }
+
+    public Organization(String uuid, Link homePage, List<Position> positions) {
+        Objects.requireNonNull(uuid, "uuid must not be null");
+        this.uuid = uuid;
         this.homePage = homePage;
         this.positions = positions;
     }
 
-    public int getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
     public Link getHomePage() {
